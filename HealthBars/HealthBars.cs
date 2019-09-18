@@ -286,7 +286,7 @@ namespace HealthBars
 
             if (bar.Settings.ShowHealthText)
             {
-                var formattableString = $"{bar.Life.CurHP}/{bar.MaxHp}";
+                var formattableString = $"{bar.Life.CurHP}";
 
                 Graphics.DrawText(formattableString,
                     new Vector2(bar.BackGround.Center.X, bar.BackGround.Center.Y - Graphics.Font.Size / 2f),
