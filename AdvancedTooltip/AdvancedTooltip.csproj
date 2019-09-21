@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\..\PoeHelper\Plugins\Compiled\AdvancedTooltip\</OutputPath>
+    <OutputPath>..\..\PoeHelper\Plugins\Compiled\AdvancedTooltip\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -98,7 +98,7 @@
     <Compile Include="WeaponDpsSettings.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Core\Core.csproj">
+    <ProjectReference Include="..\..\ExileApi\Core\Core.csproj">
       <Project>{5539D732-34A7-44AB-9E28-116C3429B12A}</Project>
       <Name>Core</Name>
       <Private>False</Private>
