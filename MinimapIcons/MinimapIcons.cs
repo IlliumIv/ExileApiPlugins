@@ -122,7 +122,6 @@ namespace MinimapIcons
             var playerPos = GameController.Player.GetComponent<Positioned>().GridPos;
             var posZ = GameController.Player.GetComponent<Render>().Pos.Z;
             var mapWindowLargeMapZoom = mapWindow.LargeMapZoom;
-            var mapWindowSmallMinMapZoom = mapWindow.SmallMinMapZoom;
 
             var baseIcons = GameController.EntityListWrapper.OnlyValidEntities
                 .SelectWhereF(x => x.GetHudComponent<BaseIcon>(), icon => icon != null).OrderByF(x => x.Priority)
@@ -155,7 +154,7 @@ namespace MinimapIcons
                 else
                 {
                     position = screentCenterCache +
-                               MapIcon.DeltaInWorldToMinimapDelta(icon.GridPosition() - playerPos, diag, 240f, (iconZ - posZ) / (20 / mapWindowSmallMinMapZoom));
+                               MapIcon.DeltaInWorldToMinimapDelta(icon.GridPosition() - playerPos, diag, 240f, (iconZ - posZ) / 20);
                 }
 
                 HudTexture iconValueMainTexture;
@@ -213,7 +212,7 @@ namespace MinimapIcons
                         else
                         {
                             position = screentCenterCache +
-                                       MapIcon.DeltaInWorldToMinimapDelta(icon.GridPosition() - playerPos, diag, 240f, (iconZ - posZ) / (20 / mapWindowSmallMinMapZoom));
+                                       MapIcon.DeltaInWorldToMinimapDelta(icon.GridPosition() - playerPos, diag, 240f, (iconZ - posZ) / 20);
                         }
 
                         HudTexture iconValueMainTexture;
