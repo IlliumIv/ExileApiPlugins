@@ -30,7 +30,6 @@ namespace Stashie
         private readonly Stopwatch StackItemTimer = new Stopwatch();
         private readonly WaitTime wait10ms = new WaitTime(10);
         private readonly WaitTime wait3ms = new WaitTime(3);
-        private bool _bDropOnce;
         private Vector2 _clickWindowOffset;
         private List<CustomFilter> _customFilters;
         private List<RefillProcessor> _customRefills;
@@ -39,17 +38,11 @@ namespace Stashie
         private List<ListIndexNode> _settingsListNodes;
         private uint coroutineIteration;
         private Coroutine CoroutineWorker;
-        private bool CtrlDown;
         private Action FilterTabs;
-        private CircularBuffer<string> HistoryOfWork = new CircularBuffer<string>(1024);
-        private bool openned;
-        private bool popup;
         private string[] StashTabNamesByIndex;
         private Coroutine StashTabNamesCoroutine;
         private Action TestAction;
         private int visibleStashIndex = -1;
-        private WaitTime wait1ms = new WaitTime(1);
-        private WaitTime wait50ms = new WaitTime(50);
 
         public StashieCore()
         {
@@ -367,7 +360,6 @@ namespace Stashie
             if (CoroutineWorker != null && CoroutineWorker.IsDone)
             {
                 Input.KeyUp(Keys.LControlKey);
-                CtrlDown = false;
                 CoroutineWorker = null;
             }
 
@@ -417,6 +409,9 @@ namespace Stashie
             yield return ProcessRefills();
             yield return Input.SetCursorPositionSmooth(new Vector2(cursorPosPreMoving.X, cursorPosPreMoving.Y));
             Input.MouseMove();
+
+            CoroutineWorker = Core.ParallelRunner.FindByName(coroutineName);
+            CoroutineWorker?.Done();
 
             DebugTimer.Restart();
             DebugTimer.Stop();
@@ -492,9 +487,6 @@ namespace Stashie
             coroutineIteration++;
             
             yield return DropItemsToStash();
-
-            CoroutineWorker = Core.ParallelRunner.FindByName(coroutineName);
-            CoroutineWorker?.Done();
         }
 
         private IEnumerator DropItemsToStash()
@@ -502,6 +494,7 @@ namespace Stashie
             var tries = 0;
             var index = 0;
             NormalInventoryItem lastHoverItem = null;
+            PublishEvent("stashie_start_drop_items", null);
 
             while (_dropItems.Count > 0 && tries < 2)
             {
@@ -554,6 +547,9 @@ namespace Stashie
                             }
 
                             yield return new WaitTime(100);
+
+                            PublishEvent("stashie_finish_drop_items_to_stash_tab", null);
+
                             if (!waited) waitedItems.Clear();
 
                             if (DebugTimer.ElapsedMilliseconds > tryTime)
@@ -647,6 +643,8 @@ namespace Stashie
                         waitedItems.Add(stashResults);
 
                     DebugTimer.Restart();
+
+                    PublishEvent("stashie_finish_drop_items_to_stash_tab", null);
                 }
 
                 if (Settings.VisitTabWhenDone.Value) yield return SwitchToTab(Settings.TabToVisitWhenDone.Value);
@@ -654,6 +652,8 @@ namespace Stashie
                 Input.KeyUp(Keys.LControlKey);
                 yield return ParseItems();
             }
+
+            PublishEvent("stashie_stop_drop_items", null);
         }
 
         #region Refill
@@ -866,7 +866,7 @@ namespace Stashie
             var delay = (int) GameController.Game.IngameState.CurLatency * 2 + Settings.ExtraDelay;
             Input.KeyDown(Keys.ShiftKey);
 
-            while (!Input.IsKeyDown((int) Keys.ShiftKey))
+            while (!Input.IsKeyDown(Keys.ShiftKey))
             {
                 yield return new WaitTime(WHILE_DELAY);
             }
