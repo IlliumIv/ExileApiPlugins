@@ -53,7 +53,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicFlaskRoutine", "BasicF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tradie", "Tradie\Tradie.csproj", "{DBB3C794-72B7-4D5A-99C7-E7E59136C42D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Poe.Ninja Pricer", "Poe.Ninja Pricer\Poe.Ninja Pricer.csproj", "{F65A35B8-85F4-4A43-B19A-4A7E09F0CB99}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ninja Price", "Get-Chaos-Value\Ninja Price\Ninja Price.csproj", "{F65A35B8-85F4-4A43-B19A-4A7E09F0CB99}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
