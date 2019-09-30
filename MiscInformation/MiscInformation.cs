@@ -132,7 +132,7 @@ namespace MiscInformation
         {
             percentGot = 0;
             xpRate = "0.00 xp/h";
-            timeLeft = "-h -m -s  to level up";
+            timeLeft = "00h 00m 00s  to level up";
             getXp = 0;
             xpLeftQ = 0;
 
