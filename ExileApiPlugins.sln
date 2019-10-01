@@ -55,6 +55,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tradie", "Tradie\Tradie.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Poe.Ninja Pricer", "Poe.Ninja Pricer\Poe.Ninja Pricer.csproj", "{F65A35B8-85F4-4A43-B19A-4A7E09F0CB99}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheatSheets", "CheatSheets\CheatSheets.csproj", "{73D6B18A-BC91-4B74-9FF0-DF99C0E01E4E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -271,6 +273,14 @@ Global
 		{F65A35B8-85F4-4A43-B19A-4A7E09F0CB99}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F65A35B8-85F4-4A43-B19A-4A7E09F0CB99}.Release|x64.ActiveCfg = Release|Any CPU
 		{F65A35B8-85F4-4A43-B19A-4A7E09F0CB99}.Release|x64.Build.0 = Release|Any CPU
+		{73D6B18A-BC91-4B74-9FF0-DF99C0E01E4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73D6B18A-BC91-4B74-9FF0-DF99C0E01E4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73D6B18A-BC91-4B74-9FF0-DF99C0E01E4E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{73D6B18A-BC91-4B74-9FF0-DF99C0E01E4E}.Debug|x64.Build.0 = Debug|Any CPU
+		{73D6B18A-BC91-4B74-9FF0-DF99C0E01E4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73D6B18A-BC91-4B74-9FF0-DF99C0E01E4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73D6B18A-BC91-4B74-9FF0-DF99C0E01E4E}.Release|x64.ActiveCfg = Release|Any CPU
+		{73D6B18A-BC91-4B74-9FF0-DF99C0E01E4E}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
