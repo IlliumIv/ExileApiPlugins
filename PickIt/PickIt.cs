@@ -36,6 +36,7 @@ namespace PickIt
         private bool _fullWork = true;
         private Coroutine _pickItCoroutine;
         private List<string> _ignoredCurrency;
+        private List<string> _customItems = new List<string>();
         public PickIt()
         {
             Name = "Pickit";
@@ -59,6 +60,7 @@ namespace PickIt
             Settings.ExtraDelay.OnValueChanged += (sender, i) => _workCoroutine = new WaitTime(i);
             LoadRuleFiles();
             LoadIgnoredCurrency();
+            LoadCustomItems();
             return true;
         }
 
@@ -81,6 +83,14 @@ namespace PickIt
             }
 
             _ignoredCurrency = File.ReadAllLines(cfgPath).Where(x => !string.IsNullOrEmpty(x)).ToList();
+        }
+
+        private void LoadCustomItems()
+        {
+            _customItems.Add("Treasure Key");
+            _customItems.Add("Divine Life Flask");
+            _customItems.Add("Quicksilver Flask");
+            _customItems.Add("Stone of Passage");
         }
 
         private IEnumerator MainWorkCoroutine()
@@ -261,7 +271,8 @@ namespace PickIt
 
                 if (Settings.AllCurrency && item.ClassName.EndsWith("Currency"))
                 {
-                    return !_ignoredCurrency.Contains(item.BaseName);
+                    // return _ignoredCurrency.Contains(item.BaseName);
+                    return true;
                 }
 
                 #endregion
@@ -351,6 +362,13 @@ namespace PickIt
 
                 if (Settings.AllUniques && item.Rarity == ItemRarity.Unique) return true;
 
+                #endregion
+
+                #region Custom Rules
+                if (_customItems.Contains(item.BaseName))
+                    return true;
+                if (item.Quality >= 1 && item.ClassName.Contains("Flask"))
+                    return true;
                 #endregion
             }
             catch (Exception e)
