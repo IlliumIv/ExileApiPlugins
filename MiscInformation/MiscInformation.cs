@@ -104,7 +104,7 @@ namespace MiscInformation
                     $"Got: {ConvertHelper.ToShorten(getXp, "0.00")} ({percentGot:P3})  Left: {ConvertHelper.ToShorten(xpLeftQ, "0.00")}";
 
                 maxX = MathHepler.Max(Graphics.MeasureText(fps).X, Graphics.MeasureText(ping).X, Graphics.MeasureText(latency).X,
-                           Graphics.MeasureText(areaName).X, Graphics.MeasureText(xpReceivingText).X, Graphics.MeasureText(timeLeft).X) * 1.5f;
+                           Graphics.MeasureText(areaName).X, Graphics.MeasureText(xpReceivingText).X, Graphics.MeasureText(timeLeft).X) * 1.7f;
 
                 if (partytime > 4900)
                 {
