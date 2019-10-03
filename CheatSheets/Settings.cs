@@ -17,6 +17,7 @@ namespace CheatSheets
         public ToggleNode ShowInHideout { get; set; }
         public ToggleNode Enable { get; set; } = new ToggleNode(false);
         public ToggleNode ParallelParsing { get; set; } = new ToggleNode(true);
+        public ToggleNode Debug { get; set; } = new ToggleNode(false);
     }
 
 }

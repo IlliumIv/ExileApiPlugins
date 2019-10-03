@@ -32,14 +32,31 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="SharpDX">
-      <HintPath>..\..\OldPlugins\PoEHUD\Release\SharpDX.dll</HintPath>
+    <Reference Include="ImGui.NET">
+      <HintPath>..\..\ExileApi\deps\ImGui.NET.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="SharpDX.Mathematics">
-      <HintPath>..\..\OldPlugins\PoEHUD\Release\SharpDX.Mathematics.dll</HintPath>
+    <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.4.2.0\lib\net45\SharpDX.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SharpDX.Direct3D11, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.Direct3D11.4.2.0\lib\net45\SharpDX.Direct3D11.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SharpDX.Mathematics, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\PoeHelper\SharpDX.Mathematics.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\PoeHelper\System.Numerics.Vectors.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -55,6 +72,7 @@
     <Compile Include="Sheet.cs" />
     <Compile Include="Leagues\Betrayal.cs" />
     <Compile Include="Leagues\Incursion.cs" />
+    <Compile Include="Textures\Textures.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\ExileApi\Core\Core.csproj">
@@ -62,10 +80,25 @@
       <Name>Core</Name>
       <Private>False</Private>
     </ProjectReference>
-    <ProjectReference Include="..\PreloadAlert\PreloadAlert.csproj">
-      <Project>{8b098ca6-52e6-4d70-9f00-6802aa2e464f}</Project>
-      <Name>PreloadAlert</Name>
-    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+    <None Include="Textures\CheetSheetsAtlas.json" />
+    <None Include="Textures\Sources\2DArt_UIImages_InGame_5.psd" />
+    <None Include="Textures\Sources\CheatSheetsAtlas.ftpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Textures\CheetSheetsAtlas.png" />
+    <Content Include="Textures\Sources\2DArt_UIImages_InGame_5 - Copy.dds" />
+    <Content Include="Textures\Sources\2DArt_UIImages_InGame_5.dds" />
+    <Content Include="Textures\Sources\2DArt_UIImages_InGame_5.png" />
+    <Content Include="Textures\Sources\2DArt_UIImages_InGame_6.dds" />
+    <Content Include="Textures\Sources\2DArt_UIImages_InGame_7.dds" />
+    <Content Include="Textures\Sources\IconBetrayal.png" />
+    <Content Include="Textures\Sources\IconDelve.png" />
+    <Content Include="Textures\Sources\IconIncursion.png" />
+    <Content Include="Textures\Sources\IconUnknown.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

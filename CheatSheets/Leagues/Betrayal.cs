@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExileCore.Shared.AtlasHelper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +9,11 @@ namespace CheatSheets.Leagues
 {
     public class Betrayal : Sheet
     {
+        public static AtlasTexture _iconBetrayal { private get; set; }
         public Betrayal()
         {
             Name = "Betrayal";
+            Icon = _iconBetrayal;
 
             Preloads = new List<string>
             {
@@ -19,8 +22,6 @@ namespace CheatSheets.Leagues
                 "Metadata/Monsters/LeagueBetrayal/BetrayalOriathBlackguardMeleeChampionCartGuard",
                 "Metadata/Monsters/LeagueBetrayal/BetrayalCatarina"
             };
-
-            // Sheets.Preloads.Add(Name, Preloads);
         }
     }
 }

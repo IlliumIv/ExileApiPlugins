@@ -11,6 +11,9 @@ using ExileCore.Shared;
 using ExileCore.Shared.Enums;
 using System.Collections;
 using System.Windows.Forms;
+using ImGuiNET;
+using ImGuiVector2 = System.Numerics.Vector2;
+using ExileCore.RenderQ;
 
 namespace CheatSheets
 {
@@ -24,28 +27,27 @@ namespace CheatSheets
         public static List<string> CurrentAreaPreloads = new List<string>();
         public static List<Sheet> SheetsList { get; private set; } = new List<Sheet>();
 
-        public override void OnLoad()
-        {
-            ConfigPreload();
-        }
-
-        private void ConfigPreload()
-        {
-            SheetsList.Add(new Incursion());
-            SheetsList.Add(new Betrayal());
-        }
+        // public override void OnLoad() { }
 
         public override bool Initialise()
         {
             Name = "CheatSheets";
 
-            InitialiseTexture();
+            ConfigPreload();
+
+            if (!InitialiseTexture())
+                return false;
 
             debugInformation = new DebugInformation("Preload parsing", false);
 
             AreaChange(GameController.Area.CurrentArea);
 
             return base.Initialise();
+        }
+        private void ConfigPreload()
+        {
+            SheetsList.Add(new Incursion());
+            SheetsList.Add(new Betrayal());
         }
 
         public override Job Tick()
@@ -86,7 +88,18 @@ namespace CheatSheets
             }
             else
             {
-               // Draw Sheets
+                // Draw Sheets
+
+                foreach (Sheet sheet in SheetsList)
+                {
+                    if(sheet.AllowIconDrawing)
+                    {
+                        // var size = new ImGuiVector2(sheet.Icon.TextureUV.Width, sheet.Icon.TextureUV.Height);
+                        var size = new ImGuiVector2(90, 90);
+                        ImGui.ImageButton(ImGuiRender.Dx11.GetTexture(sheet.Icon.AtlasFilePath).NativePointer, size);
+                        Graphics.DrawImage(sheet.Icon, new RectangleF(500,500,45,45));
+                    }
+                }
             }
         }
 
