@@ -14,7 +14,7 @@ using System.Windows.Forms;
 
 namespace CheatSheets
 {
-    public class CheatSheetsCore : BaseSettingsPlugin<Settings>
+    public partial class CheatSheetsCore : BaseSettingsPlugin<Settings>
     {
         private bool isLoading;
         private bool working;
@@ -38,6 +38,8 @@ namespace CheatSheets
         public override bool Initialise()
         {
             Name = "CheatSheets";
+
+            InitialiseTexture();
 
             debugInformation = new DebugInformation("Preload parsing", false);
 
