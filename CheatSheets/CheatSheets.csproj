@@ -84,12 +84,28 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-    <None Include="Textures\CheetSheetsAtlas.json" />
+    <None Include="Textures\CheetSheetsAtlas.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Textures\Sources\2DArt_UIImages_InGame_5.psd" />
     <None Include="Textures\Sources\CheatSheetsAtlas.ftpp" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Textures\CheetSheetsAtlas.png" />
+    <Content Include="Textures\CheetSheetsAtlas.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Textures\IconBetrayal.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Textures\IconDelve.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Textures\IconIncursion.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Textures\IconUnknown.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Textures\Sources\2DArt_UIImages_InGame_5 - Copy.dds" />
     <Content Include="Textures\Sources\2DArt_UIImages_InGame_5.dds" />
     <Content Include="Textures\Sources\2DArt_UIImages_InGame_5.png" />

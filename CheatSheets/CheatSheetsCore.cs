@@ -13,7 +13,7 @@ using System.Collections;
 using System.Windows.Forms;
 using ImGuiNET;
 using ImGuiVector2 = System.Numerics.Vector2;
-using ExileCore.RenderQ;
+using ImGuiVector4 = System.Numerics.Vector4;
 
 namespace CheatSheets
 {
@@ -21,11 +21,13 @@ namespace CheatSheets
     {
         private bool isLoading;
         private bool working;
-        private bool canRender;
+        private bool canRender = false;
         private DebugInformation debugInformation;
         private readonly List<long> filesPtr = new List<long>();
         public static List<string> CurrentAreaPreloads = new List<string>();
         public static List<Sheet> SheetsList { get; private set; } = new List<Sheet>();
+
+        public static int idPop;
 
         // public override void OnLoad() { }
 
@@ -33,10 +35,11 @@ namespace CheatSheets
         {
             Name = "CheatSheets";
 
-            ConfigPreload();
-
+            #region Order is important!
             if (!InitialiseTexture())
                 return false;
+            ConfigPreload();
+            #endregion
 
             debugInformation = new DebugInformation("Preload parsing", false);
 
@@ -48,17 +51,21 @@ namespace CheatSheets
         {
             SheetsList.Add(new Incursion());
             SheetsList.Add(new Betrayal());
+            canRender = true;
+            LogMessage("ConfigPreload set canRender: " + canRender, 100);
         }
 
         public override Job Tick()
         {
             canRender = true;
 
-            if (!Settings.Enable
-                || GameController.Area.CurrentArea != null
+            if (
+                !Settings.Enable
+                // || GameController.Area.CurrentArea != null
                 || GameController.IsLoading
                 || !GameController.InGame
-                || GameController.Game.IngameState.IngameUi.StashElement.IsVisibleLocal)
+                || GameController.Game.IngameState.IngameUi.StashElement.IsVisibleLocal
+                )
             {
                 canRender = false;
             }
@@ -80,6 +87,7 @@ namespace CheatSheets
 
         public override void Render()
         {
+
             if (!canRender) return;
 
             if (isLoading)
@@ -90,14 +98,46 @@ namespace CheatSheets
             {
                 // Draw Sheets
 
+                idPop = 1;
+
                 foreach (Sheet sheet in SheetsList)
                 {
-                    if(sheet.AllowIconDrawing)
+                    if (sheet.AllowIconDrawing)
                     {
                         // var size = new ImGuiVector2(sheet.Icon.TextureUV.Width, sheet.Icon.TextureUV.Height);
-                        var size = new ImGuiVector2(90, 90);
-                        ImGui.ImageButton(ImGuiRender.Dx11.GetTexture(sheet.Icon.AtlasFilePath).NativePointer, size);
-                        Graphics.DrawImage(sheet.Icon, new RectangleF(500,500,45,45));
+                        var size = new ImGuiVector2(47, 47);
+                        Graphics.DrawImage(sheet.Icon, new RectangleF(503, 505, 45, 45));
+                        //ImGui.BeginPopupContextWindow("Some Popup");
+
+                        LogMessage(sheet.Icon.AtlasFileName);
+                        bool refBool = true;
+
+                        ImGui.SetNextWindowPos(new ImGuiVector2(500, 500), ImGuiCond.Appearing);
+                        ImGui.SetNextWindowSize(size, ImGuiCond.Appearing);
+
+                        ImGui.Begin("Icon window", ref refBool,
+                            ImGuiWindowFlags.NoBackground |
+                            ImGuiWindowFlags.NoTitleBar |
+                            ImGuiWindowFlags.NoScrollbar |
+                            ImGuiWindowFlags.NoResize |
+                            ImGuiWindowFlags.NoMove
+                            );
+
+                        ImGui.PushID(idPop);
+                        var hue = 1f / idPop;
+                        // ImGuiVector4(r, g, b, a);
+                        ImGui.PushStyleColor(ImGuiCol.Button, new ImGuiVector4(0, 0, 0, 0));
+                        ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new ImGuiVector4(0, 0, 0, 0.3f));
+                        ImGui.PushStyleColor(ImGuiCol.ButtonActive, new ImGuiVector4(0, 0, 0, 0.6f));
+                        // ImGui.PushStyleVar(ImGuiStyleVar.FrameRounding, 3.0f);
+                        // ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, 2.0f);
+                        ImGui.Button(idPop.ToString(), size);
+                        // ImGui.ImageButton(ImGuiRender.Dx11.GetTexture(sheet.Icon.AtlasFileName).NativePointer, size);
+
+                        //ImGui.InvisibleButton("", size);
+                        ImGui.End();
+                        //ImGui.End();
+                        
                     }
                 }
             }
@@ -235,12 +275,13 @@ namespace CheatSheets
         private void CheckForSheets(string text)
         {
             foreach (var sheet in SheetsList)
-                if (sheet.Preloads.Contains("", StringComparer.OrdinalIgnoreCase))
-                {
-                    sheet.AllowIconDrawing = true;
-                    LogMessage(sheet.Name + " contains preload " + text);
-                    break;
-                }
+                foreach(string preload in sheet.Preloads)
+                    if (text.StartsWith(preload))
+                    {
+                        sheet.AllowIconDrawing = true;
+                        LogMessage(sheet.Name + " contains preload " + text);
+                        break;
+                    }
             // var sheets_preload = Preloads.Where(kv => text.StartsWith(kv.Key, StringComparison.OrdinalIgnoreCase))
             //     .Select(kv => kv.Value).FirstOrDefault();
 

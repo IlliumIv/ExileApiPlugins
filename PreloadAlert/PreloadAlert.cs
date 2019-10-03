@@ -100,7 +100,7 @@ namespace PreloadAlert
             {
                 Directory.CreateDirectory(Path.Combine(DirectoryFullName, "Dumps"));
                 var path = Path.Combine(DirectoryFullName, "Dumps",
-                    $"{GameController.Area.CurrentArea.Name} ({DateTime.Now}).txt");
+                    $"{GameController.Area.CurrentArea.Name} ({DateTime.Now.ToString().Replace(":", ".")}).txt");
 
                 File.WriteAllLines(path, PreloadDebug);
             }
