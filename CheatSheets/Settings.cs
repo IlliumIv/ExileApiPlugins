@@ -18,6 +18,7 @@ namespace CheatSheets
         public ToggleNode Enable { get; set; } = new ToggleNode(false);
         public ToggleNode ParallelParsing { get; set; } = new ToggleNode(true);
         public ToggleNode Debug { get; set; } = new ToggleNode(false);
+        public RangeNode<float> X { get; set; } = new RangeNode<float>(1, 1, 500);
+        public RangeNode<float> Y { get; set; } = new RangeNode<float>(1, 1, 500);
     }
-
 }

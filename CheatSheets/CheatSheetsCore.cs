@@ -12,8 +12,8 @@ using ExileCore.Shared.Enums;
 using System.Collections;
 using System.Windows.Forms;
 using ImGuiNET;
-using ImGuiVector2 = System.Numerics.Vector2;
-using ImGuiVector4 = System.Numerics.Vector4;
+using ExileCore.Shared.Nodes;
+using System.Reflection;
 
 namespace CheatSheets
 {
@@ -29,17 +29,33 @@ namespace CheatSheets
 
         public static int idPop;
 
+        //https://stackoverflow.com/questions/826777/how-to-have-an-auto-incrementing-version-number-visual-studio
+        //https://stackoverflow.com/questions/53782085/visual-studio-assemblyversion-with-dont-work
+        public Version version = Assembly.GetExecutingAssembly().GetName().Version;
+        public string PluginVersion;
+        public DateTime buildDate;
+
         // public override void OnLoad() { }
 
         public override bool Initialise()
         {
             Name = "CheatSheets";
 
+            buildDate = new DateTime(2000, 1, 1).AddDays(version.Build).AddSeconds(version.Revision * 2);
+            PluginVersion = $"{version}";
+
             #region Order is important!
             if (!InitialiseTexture())
                 return false;
             ConfigPreload();
             #endregion
+
+            var clientRect = GameController.Window.GetWindowRectangle();
+
+            Settings.X.Max = clientRect.Width;
+            Settings.Y.Max = clientRect.Height;
+            Settings.X.Value = 500f;
+            Settings.Y.Value = Settings.Y.Max / 2;
 
             debugInformation = new DebugInformation("Preload parsing", false);
 
@@ -99,45 +115,13 @@ namespace CheatSheets
                 // Draw Sheets
 
                 idPop = 1;
+                var startPos = new Vector2(Settings.X, Settings.Y);
 
                 foreach (Sheet sheet in SheetsList)
                 {
                     if (sheet.AllowIconDrawing)
                     {
-                        // var size = new ImGuiVector2(sheet.Icon.TextureUV.Width, sheet.Icon.TextureUV.Height);
-                        var size = new ImGuiVector2(47, 47);
-                        Graphics.DrawImage(sheet.Icon, new RectangleF(503, 505, 45, 45));
-                        //ImGui.BeginPopupContextWindow("Some Popup");
-
-                        LogMessage(sheet.Icon.AtlasFileName);
-                        bool refBool = true;
-
-                        ImGui.SetNextWindowPos(new ImGuiVector2(500, 500), ImGuiCond.Appearing);
-                        ImGui.SetNextWindowSize(size, ImGuiCond.Appearing);
-
-                        ImGui.Begin("Icon window", ref refBool,
-                            ImGuiWindowFlags.NoBackground |
-                            ImGuiWindowFlags.NoTitleBar |
-                            ImGuiWindowFlags.NoScrollbar |
-                            ImGuiWindowFlags.NoResize |
-                            ImGuiWindowFlags.NoMove
-                            );
-
-                        ImGui.PushID(idPop);
-                        var hue = 1f / idPop;
-                        // ImGuiVector4(r, g, b, a);
-                        ImGui.PushStyleColor(ImGuiCol.Button, new ImGuiVector4(0, 0, 0, 0));
-                        ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new ImGuiVector4(0, 0, 0, 0.3f));
-                        ImGui.PushStyleColor(ImGuiCol.ButtonActive, new ImGuiVector4(0, 0, 0, 0.6f));
-                        // ImGui.PushStyleVar(ImGuiStyleVar.FrameRounding, 3.0f);
-                        // ImGui.PushStyleVar(ImGuiStyleVar.FramePadding, 2.0f);
-                        ImGui.Button(idPop.ToString(), size);
-                        // ImGui.ImageButton(ImGuiRender.Dx11.GetTexture(sheet.Icon.AtlasFileName).NativePointer, size);
-
-                        //ImGui.InvisibleButton("", size);
-                        ImGui.End();
-                        //ImGui.End();
-                        
+                        startPos += IconButton(sheet.Icon, startPos);
                     }
                 }
             }
@@ -425,5 +409,15 @@ namespace CheatSheets
         //     var alert = Preload.Where(kv => text.EndsWith(kv.Key, StringComparison.OrdinalIgnoreCase)).Select(kv => kv.Value)
         //     .FirstOrDefault();
         // }
+
+        public override void DrawSettings()
+        {
+            ImGui.BulletText($"{Name}: v{PluginVersion}");
+            ImGui.BulletText($"Last Updated: {buildDate}");
+            ImGui.Separator();
+
+            base.DrawSettings();
+
+        }
     }
 }
