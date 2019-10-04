@@ -1,3 +1,18 @@
 [submodule "Cheat Sheets"]
 	path = Cheat Sheets
 	url = https://github.com/IlliumIv/Cheat-Sheets.git
+[submodule "AutoSkill"]
+	path = AutoSkill
+	url = https://github.com/IlliumIv/AutoSkill.git
+[submodule "BasicFlaskRoutine"]
+	path = BasicFlaskRoutine
+	url = https://github.com/IlliumIv/BasicFlaskRoutine.git
+[submodule "FullRareSetManager"]
+	path = FullRareSetManager
+	url = https://github.com/IlliumIv/FullRareSetManager.git
+[submodule "Random Features"]
+	path = Random Features
+	url = https://github.com/IlliumIv/Random-Features.git
+[submodule "Tradie"]
+	path = Tradie
+	url = https://github.com/IlliumIv/Tradie.git
