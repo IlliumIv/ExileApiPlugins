@@ -16,3 +16,6 @@
 [submodule "Tradie"]
 	path = Tradie
 	url = https://github.com/IlliumIv/Tradie.git
+[submodule "Get-Chaos-Value"]
+	path = Get-Chaos-Value
+	url = https://github.com/IlliumIv/Get-Chaos-Value.git
