@@ -19,3 +19,6 @@
 [submodule "Get-Chaos-Value"]
 	path = Get-Chaos-Value
 	url = https://github.com/IlliumIv/Get-Chaos-Value.git
+[submodule "Delve"]
+	path = Delve
+	url = https://github.com/IlliumIv/Delve.git

@@ -57,6 +57,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ninja Price", "Get-Chaos-Va
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cheat Sheets", "Cheat Sheets\Cheat Sheets.csproj", "{DD4F2705-0649-417B-97ED-6C02F4B396D7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Delve", "Delve\Delve.csproj", "{29FF372D-71EB-4F28-9142-FB5573281060}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -281,6 +283,14 @@ Global
 		{DD4F2705-0649-417B-97ED-6C02F4B396D7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DD4F2705-0649-417B-97ED-6C02F4B396D7}.Release|x64.ActiveCfg = Release|Any CPU
 		{DD4F2705-0649-417B-97ED-6C02F4B396D7}.Release|x64.Build.0 = Release|Any CPU
+		{29FF372D-71EB-4F28-9142-FB5573281060}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29FF372D-71EB-4F28-9142-FB5573281060}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29FF372D-71EB-4F28-9142-FB5573281060}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{29FF372D-71EB-4F28-9142-FB5573281060}.Debug|x64.Build.0 = Debug|Any CPU
+		{29FF372D-71EB-4F28-9142-FB5573281060}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29FF372D-71EB-4F28-9142-FB5573281060}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29FF372D-71EB-4F28-9142-FB5573281060}.Release|x64.ActiveCfg = Release|Any CPU
+		{29FF372D-71EB-4F28-9142-FB5573281060}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
