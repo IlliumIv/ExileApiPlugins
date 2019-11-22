@@ -22,3 +22,9 @@
 [submodule "Delve"]
 	path = Delve
 	url = https://github.com/IlliumIv/Delve.git
+[submodule "ScourgeArrowCharges"]
+	path = ScourgeArrowCharges
+	url = https://github.com/IlliumIv/ScourgeArrowCharges.git
+[submodule "BladeFlurryCharges"]
+	path = BladeFlurryCharges
+	url = https://github.com/IlliumIv/BladeFlurryCharges.git

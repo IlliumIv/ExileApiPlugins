@@ -59,6 +59,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cheat Sheets", "Cheat Sheet
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Delve", "Delve\Delve.csproj", "{29FF372D-71EB-4F28-9142-FB5573281060}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScourgeArrowCharges", "ScourgeArrowCharges\ScourgeArrowCharges.csproj", "{D0344191-0958-4D1B-8A24-9A518F6E2636}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BladeFlurryCharges", "BladeFlurryCharges\BladeFlurryCharges.csproj", "{43C1E680-D1EF-4F12-B330-5561AD092A52}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -291,6 +295,22 @@ Global
 		{29FF372D-71EB-4F28-9142-FB5573281060}.Release|Any CPU.Build.0 = Release|Any CPU
 		{29FF372D-71EB-4F28-9142-FB5573281060}.Release|x64.ActiveCfg = Release|Any CPU
 		{29FF372D-71EB-4F28-9142-FB5573281060}.Release|x64.Build.0 = Release|Any CPU
+		{D0344191-0958-4D1B-8A24-9A518F6E2636}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0344191-0958-4D1B-8A24-9A518F6E2636}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0344191-0958-4D1B-8A24-9A518F6E2636}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D0344191-0958-4D1B-8A24-9A518F6E2636}.Debug|x64.Build.0 = Debug|Any CPU
+		{D0344191-0958-4D1B-8A24-9A518F6E2636}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0344191-0958-4D1B-8A24-9A518F6E2636}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0344191-0958-4D1B-8A24-9A518F6E2636}.Release|x64.ActiveCfg = Release|Any CPU
+		{D0344191-0958-4D1B-8A24-9A518F6E2636}.Release|x64.Build.0 = Release|Any CPU
+		{43C1E680-D1EF-4F12-B330-5561AD092A52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43C1E680-D1EF-4F12-B330-5561AD092A52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43C1E680-D1EF-4F12-B330-5561AD092A52}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{43C1E680-D1EF-4F12-B330-5561AD092A52}.Debug|x64.Build.0 = Debug|Any CPU
+		{43C1E680-D1EF-4F12-B330-5561AD092A52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43C1E680-D1EF-4F12-B330-5561AD092A52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43C1E680-D1EF-4F12-B330-5561AD092A52}.Release|x64.ActiveCfg = Release|Any CPU
+		{43C1E680-D1EF-4F12-B330-5561AD092A52}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
