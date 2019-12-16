@@ -88,6 +88,7 @@ namespace PickIt
         private void LoadCustomItems()
         {
             _customItems.Add("Treasure Key");
+            _customItems.Add("Silver Key");
             _customItems.Add("Divine Life Flask");
             _customItems.Add("Quicksilver Flask");
             _customItems.Add("Stone of Passage");
