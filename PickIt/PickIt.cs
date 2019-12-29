@@ -381,6 +381,8 @@ namespace PickIt
                     return true;
                 if (item.Quality >= 1 && item.ClassName.Contains("Flask"))
                     return true;
+                if (item.BaseName.Contains("Watchstone"))
+                    return true;
                 #endregion
             }
             catch (Exception e)
