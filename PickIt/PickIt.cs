@@ -383,6 +383,8 @@ namespace PickIt
                     return true;
                 if (item.BaseName.Contains("Watchstone"))
                     return true;
+                if (item.BaseName.Contains("Incubator"))
+                    return true;
                 #endregion
             }
             catch (Exception e)
