@@ -28,3 +28,6 @@
 [submodule "BladeFlurryCharges"]
 	path = BladeFlurryCharges
 	url = https://github.com/IlliumIv/BladeFlurryCharges.git
+[submodule "FollowMe"]
+	path = FollowMe
+	url = https://github.com/IlliumIv/FollowMe.git
