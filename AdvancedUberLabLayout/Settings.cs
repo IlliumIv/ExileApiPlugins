@@ -7,10 +7,10 @@ public class Settings : ISettings
 {
     public int CurrentImageDateDay = -1;
     public bool ShowImage = true;
-
+    
     public Settings()
     {
-        LabType = new ListNode {Value = "uber"};
+        LabType = new ListNode();
         AutoLabDetection = new ToggleNode(true);
         X = new RangeNode<float>(500, 0, 2000);
         Y = new RangeNode<float>(0, 0, 2000);

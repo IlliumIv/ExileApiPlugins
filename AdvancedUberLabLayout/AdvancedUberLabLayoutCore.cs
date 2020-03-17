@@ -7,6 +7,7 @@ using System.Net;
 using System.Threading.Tasks;
 using ExileCore;
 using ExileCore.Shared.Enums;
+using ExileCore.Shared.Input;
 using SharpDX;
 using Color = SharpDX.Color;
 using Rectangle = System.Drawing.Rectangle;
@@ -47,14 +48,14 @@ namespace AdvancedUberLabLayout
             LoadImage();
 #pragma warning restore 4014
 
-            Settings.LabType.SetListValues(LabTypes.ToList());
+            Settings.LabType.SetListValues(LabTypes);
 
 #pragma warning disable 4014
             Settings.LabType.OnValueSelected += delegate { LoadImage(); };
 #pragma warning restore 4014
 
-            Input.RegisterKey(Settings.Reload);
-            Input.RegisterKey(Settings.ToggleDraw);
+            Input.Instance.RegisterKey(Settings.Reload);
+            Input.Instance.RegisterKey(Settings.ToggleDraw);
 
             return true;
         }
@@ -78,8 +79,8 @@ namespace AdvancedUberLabLayout
             UpdateTime();
 
             if (ImageState == ImageCheckState.ReadyToDraw &&
-                !GameController.Game.IngameState.IngameUi.OpenLeftPanel.IsVisible &&
-                !GameController.Game.IngameState.IngameUi.OpenRightPanel.IsVisible)
+                (GameController.Game.IngameState.IngameUi.OpenRightPanel is null) &&
+                (GameController.Game.IngameState.IngameUi.OpenRightPanel is null))
             {
                 var color = Color.White;
                 color.A = (byte) Settings.Transparency;
