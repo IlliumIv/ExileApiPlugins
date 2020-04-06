@@ -38,6 +38,10 @@
       <HintPath>..\..\PoeHelper\Antlr4.Runtime.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="ExileCore">
+      <HintPath>..\..\TehCheat\PoEHelper\ExileCore.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="JM.LinqFaster, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\PoeHelper\JM.LinqFaster.dll</HintPath>
       <Private>False</Private>
@@ -76,13 +80,6 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\ExileApi\Core\Core.csproj">
-      <Project>{5539d732-34a7-44ab-9e28-116c3429b12a}</Project>
-      <Name>Core</Name>
-      <Private>False</Private>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

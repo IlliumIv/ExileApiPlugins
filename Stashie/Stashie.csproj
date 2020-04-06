@@ -17,16 +17,15 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\PoeHelper\Plugins\Compiled\Stashie\</OutputPath>
+    <OutputPath>..\..\..\..\PoeHelper\Plugins\Compiled\Stashie\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\..\PoeHelper\Plugins\Compiled\Stashie\</OutputPath>
+    <OutputPath>..\..\..\..\PoEHelper\Plugins\Compiled\Stashie\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -50,25 +49,30 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ImGui.NET, Version=1.71.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\ExileApi\deps\ImGui.NET.dll</HintPath>
+    <Reference Include="ExileCore">
+      <HintPath>..\..\TehCheat\PoEHelper\ExileCore.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="JM.LinqFaster, Version=0.1.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\PoeHelper\JM.LinqFaster.dll</HintPath>
+    <Reference Include="ImGui.NET">
+      <HintPath>..\..\TehCheat\PoEHelper\ImGui.NET.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="JM.LinqFaster">
+      <HintPath>..\..\TehCheat\PoEHelper\JM.LinqFaster.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="mscorlib" />
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
-      <HintPath>..\..\PoeHelper\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\TehCheat\PoEHelper\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <HintPath>..\..\PoeHelper\SharpDX.dll</HintPath>
+    <Reference Include="SharpDX">
+      <HintPath>..\..\TehCheat\PoEHelper\SharpDX.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="SharpDX.Mathematics, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <HintPath>..\..\PoeHelper\SharpDX.Mathematics.dll</HintPath>
+    <Reference Include="SharpDX.Mathematics">
+      <HintPath>..\..\TehCheat\PoEHelper\SharpDX.Mathematics.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -78,12 +82,13 @@
     </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
-    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <HintPath>..\..\PoeHelper\System.Numerics.Vectors.dll</HintPath>
+    <Reference Include="System.Numerics.Vectors, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\TehCheat\PoEHelper\System.Numerics.Vectors.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <HintPath>..\..\PoeHelper\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+      <HintPath>..\..\..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System.Windows.Forms" />
@@ -95,32 +100,33 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseFilter.cs" />
+    <Compile Include="Filter\AnyInfluenceItemFilter.cs" />
+    <Compile Include="Filter\BaseFilter.cs" />
+    <Compile Include="Filter\BlightedMapFilter.cs" />
+    <Compile Include="Filter\HunterItemFilter.cs" />
+    <Compile Include="Filter\RedeemerItemFilter.cs" />
+    <Compile Include="Filter\WarlordItemFilter.cs" />
+    <Compile Include="Filter\CrusaderItemFilter.cs" />
+    <Compile Include="Filter\CorruptedItemFilter.cs" />
     <Compile Include="FilterParser.cs" />
-    <Compile Include="CustomFilter.cs" />
-    <Compile Include="ElderItemFiler.cs" />
+    <Compile Include="Filter\CustomFilter.cs" />
+    <Compile Include="Filter\ElderItemFiler.cs" />
     <Compile Include="FilterParameterCompare.cs" />
     <Compile Include="FilterResult.cs" />
-    <Compile Include="IdentifiedItemFilter.cs" />
-    <Compile Include="IIFilter.cs" />
+    <Compile Include="Filter\IdentifiedItemFilter.cs" />
+    <Compile Include="Filter\IIFilter.cs" />
     <Compile Include="ItemData.cs" />
+    <Compile Include="Filter\SynthesisedItemFilter.cs" />
     <Compile Include="ListIndexNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Refill.cs" />
-    <Compile Include="ShaperItemFiler.cs" />
+    <Compile Include="Filter\ShaperItemFilter.cs" />
     <Compile Include="Stashie.cs" />
     <Compile Include="StashieSettings.cs" />
-    <Compile Include="FracturedItemFiler.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\ExileApi\Core\Core.csproj">
-      <Project>{5539d732-34a7-44ab-9e28-116c3429b12a}</Project>
-      <Name>Core</Name>
-      <Private>False</Private>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

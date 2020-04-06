@@ -7,32 +7,43 @@ namespace Stashie
 {
     public class FilterParser
     {
-        private const char CYMBOL_COMMANDSDIVIDE = ',';
-        private const char CYMBOL_COMMAND_FILTER_OR = '|';
-        private const char CYMBOL_NAMEDIVIDE = ':';
-        private const char CYMBOL_SUBMENUNAME = ':';
-        private const char CYMBOL_NOT = '!';
-        private const string COMMENTCYMBOL = "#";
-        private const string COMMENTCYMBOLALT = "//";
+        private const char SYMBOL_COMMANDSDIVIDE = ',';
+        private const char SYMBOL_COMMAND_FILTER_OR = '|';
+        private const char SYMBOL_NAMEDIVIDE = ':';
+        private const char SYMBOL_SUBMENUNAME = ':';
+        private const char SYMBOL_NOT = '!';
+        private const string COMMENTSYMBOL = "#";
+        private const string COMMENTSYMBOLALT = "//";
 
         //String compare
         private const string PARAMETER_CLASSNAME = "classname";
         private const string PARAMETER_BASENAME = "basename";
         private const string PARAMETER_PATH = "path";
+        private const string PARAMETER_NAME = "name";
+        private const string PARAMETER_DESCRIPTION = "desc";
 
         //Number compare
         private const string PARAMETER_QUALITY = "itemquality";
         private const string PARAMETER_RARITY = "rarity";
         private const string PARAMETER_ILVL = "ilvl";
         private const string PARAMETER_MapTier = "tier";
-        private const string PARAMETER_NUMBER_OF_SOCKETS = "sockets";
-        private const string PARAMETER_LARGEST_LINK_SIZE = "links";
+        private const string PARAMETER_NUMBER_OF_SOCKETS = "numberofsockets";
+        private const string PARAMETER_LARGEST_LINK_SIZE = "numberoflinks";
+        private const string PARAMETER_VEILED = "veiled";
+        private const string PARAMETER_FRACTUREDMODS = "fractured";
 
         //Boolean
         private const string PARAMETER_IDENTIFIED = "identified";
+        private const string PARAMETER_ISCORRUPTED = "corrupted";
+        private const string PARAMETER_ISINFLUENCED = "influenced";
         private const string PARAMETER_ISELDER = "Elder";
         private const string PARAMETER_ISSHAPER = "Shaper";
-        private const string PARAMETER_ISFRACTURED = "Fractured";
+        private const string PARAMETER_ISCRUSADER = "Crusader";
+        private const string PARAMETER_ISHUNTER = "Hunter";
+        private const string PARAMETER_ISREDEEMER = "Redeemer";
+        private const string PARAMETER_ISWARLORD = "Warlord";
+        private const string PARAMETER_ISSYNTHESISED = "Synthesised";
+        private const string PARAMETER_ISBLIGHTEDMAP = "blightedMap";
 
         //Operations
         private const string OPERATION_NONEQUALITY = "!=";
@@ -46,8 +57,14 @@ namespace Stashie
 
         private static readonly string[] Operations =
         {
-            OPERATION_NONEQUALITY, OPERATION_LESSEQUAL, OPERATION_BIGGERQUAL, OPERATION_NOTCONTAINS, OPERATION_EQUALITY,
-            OPERATION_BIGGER, OPERATION_LESS, OPERATION_CONTAINS
+            OPERATION_NONEQUALITY, 
+            OPERATION_LESSEQUAL, 
+            OPERATION_BIGGERQUAL, 
+            OPERATION_NOTCONTAINS, 
+            OPERATION_EQUALITY,
+            OPERATION_BIGGER, 
+            OPERATION_LESS, 
+            OPERATION_CONTAINS
         };
 
         public static List<CustomFilter> Parse(string[] filtersLines)
@@ -60,12 +77,12 @@ namespace Stashie
 
                 filterLine = filterLine.Replace("\t", "");
 
-                if (filterLine.StartsWith(COMMENTCYMBOL)) continue;
-                if (filterLine.StartsWith(COMMENTCYMBOLALT)) continue;
+                if (filterLine.StartsWith(COMMENTSYMBOL)) continue;
+                if (filterLine.StartsWith(COMMENTSYMBOLALT)) continue;
 
                 if (filterLine.Replace(" ", "").Length == 0) continue;
 
-                var nameIndex = filterLine.IndexOf(CYMBOL_NAMEDIVIDE);
+                var nameIndex = filterLine.IndexOf(SYMBOL_NAMEDIVIDE);
 
                 if (nameIndex == -1)
                 {
@@ -77,7 +94,7 @@ namespace Stashie
 
                 var filterCommandsLine = filterLine.Substring(nameIndex + 1);
 
-                var submenuIndex = filterCommandsLine.IndexOf(CYMBOL_SUBMENUNAME);
+                var submenuIndex = filterCommandsLine.IndexOf(SYMBOL_SUBMENUNAME);
 
                 if (submenuIndex != -1)
                 {
@@ -85,7 +102,7 @@ namespace Stashie
                     filterCommandsLine = filterCommandsLine.Substring(0, submenuIndex);
                 }
 
-                var filterCommands = filterCommandsLine.Split(CYMBOL_COMMANDSDIVIDE);
+                var filterCommands = filterCommandsLine.Split(SYMBOL_COMMANDSDIVIDE);
                 newFilter.Commands = filterCommandsLine;
 
                 var filterErrorParse = false;
@@ -94,9 +111,9 @@ namespace Stashie
                 {
                     if (string.IsNullOrEmpty(command.Replace(" ", ""))) continue;
 
-                    if (command.Contains(CYMBOL_COMMAND_FILTER_OR))
+                    if (command.Contains(SYMBOL_COMMAND_FILTER_OR))
                     {
-                        var orFilterCommands = command.Split(CYMBOL_COMMAND_FILTER_OR);
+                        var orFilterCommands = command.Split(SYMBOL_COMMAND_FILTER_OR);
                         var newOrFilter = new BaseFilter {BAny = true};
                         newFilter.Filters.Add(newOrFilter);
 
@@ -130,31 +147,80 @@ namespace Stashie
 
             if (command.Contains(PARAMETER_IDENTIFIED))
             {
-                var identCommand = new IdentifiedItemFilter {BIdentified = command[0] != CYMBOL_NOT};
+                var identCommand = new IdentifiedItemFilter {BIdentified = command[0] != SYMBOL_NOT};
                 newFilter.Filters.Add(identCommand);
+                return true;
+            }
+
+            if (command.Contains(PARAMETER_ISCORRUPTED))
+            {
+                var corruptedCommand = new CorruptedItemFilter { BCorrupted = command[0] != SYMBOL_NOT };
+                newFilter.Filters.Add(corruptedCommand);
                 return true;
             }
 
             if (command.Contains(PARAMETER_ISELDER))
             {
-                var elderCommand = new ElderItemFiler {isElder = command[0] != CYMBOL_NOT};
+                var elderCommand = new ElderItemFiler {isElder = command[0] != SYMBOL_NOT};
                 newFilter.Filters.Add(elderCommand);
                 return true;
             }
 
             if (command.Contains(PARAMETER_ISSHAPER))
             {
-                var shaperCommand = new ShaperItemFiler {isShaper = command[0] != CYMBOL_NOT};
+                var shaperCommand = new ShaperItemFilter {isShaper = command[0] != SYMBOL_NOT};
                 newFilter.Filters.Add(shaperCommand);
                 return true;
             }
 
-            if (command.Contains(PARAMETER_ISFRACTURED))
+            if (command.Contains(PARAMETER_ISCRUSADER))
             {
-                var synthesisCommand = new FracturedItemFiler {isFractured = command[0] != CYMBOL_NOT};
-                newFilter.Filters.Add(synthesisCommand);
+                var crusaderCommand = new CrusaderItemFilter { isCrusader = command[0] != SYMBOL_NOT };
+                newFilter.Filters.Add(crusaderCommand);
                 return true;
             }
+
+            if (command.Contains(PARAMETER_ISHUNTER))
+            {
+                var hunterCommand = new HunterItemFilter { isHunter = command[0] != SYMBOL_NOT };
+                newFilter.Filters.Add(hunterCommand);
+                return true;
+            }
+
+            if (command.Contains(PARAMETER_ISREDEEMER))
+            {
+                var redeemerCommand = new RedeemerItemFilter { isRedeemer = command[0] != SYMBOL_NOT };
+                newFilter.Filters.Add(redeemerCommand);
+                return true;
+            }
+
+            if (command.Contains(PARAMETER_ISWARLORD))
+            {
+                var warordCommand = new WarlordItemFilter { isWarlord = command[0] != SYMBOL_NOT };
+                newFilter.Filters.Add(warordCommand);
+                return true;
+            }
+
+            if (command.Contains(PARAMETER_ISINFLUENCED))
+            {
+                var influencedCommand = new AnyInfluenceItemFilter { isInfluenced = command[0] != SYMBOL_NOT };
+                newFilter.Filters.Add(influencedCommand);
+                return true;
+            }
+
+            if (command.Contains(PARAMETER_ISBLIGHTEDMAP))
+            {
+                var blightedMapCommand = new BlightedMapFilter { isBlightMap = command[0] != SYMBOL_NOT };
+                newFilter.Filters.Add(blightedMapCommand);
+                return true;
+            }
+            /*
+            if (command.Contains(PARAMETER_ISSYNTHESISED))
+            {
+                var synthesisedCommand = new SynthesisedItemFilter { IsSynthesised = command[0] != SYMBOL_NOT };
+                newFilter.Filters.Add(synthesisedCommand);
+                return true;
+            }*/
 
             string parameter;
             string operation;
@@ -176,8 +242,14 @@ namespace Stashie
                 case PARAMETER_BASENAME:
                     stringComp.StringParameter = data => data.BaseName;
                     break;
+                case PARAMETER_NAME:
+                    stringComp.StringParameter = data => data.Name;
+                    break;
                 case PARAMETER_PATH:
                     stringComp.StringParameter = data => data.Path;
+                    break;
+                case PARAMETER_DESCRIPTION:
+                    stringComp.StringParameter = data => data.Description;
                     break;
                 case PARAMETER_RARITY:
                     stringComp.StringParameter = data => data.Rarity.ToString();
@@ -197,18 +269,27 @@ namespace Stashie
                     stringComp.CompareInt = int.Parse(value);
                     stringComp.StringParameter = data => data.ItemLevel.ToString();
                     break;
-
                 case PARAMETER_NUMBER_OF_SOCKETS:
                     stringComp.IntParameter = data => data.NumberOfSockets;
                     stringComp.CompareInt = int.Parse(value);
                     stringComp.StringParameter = data => data.NumberOfSockets.ToString();
-                    break;
-                    
+                    break;   
                 case PARAMETER_LARGEST_LINK_SIZE:
                     stringComp.IntParameter = data => data.LargestLinkSize;
                     stringComp.CompareInt = int.Parse(value);
                     stringComp.StringParameter = data => data.LargestLinkSize.ToString();
                     break;
+                case PARAMETER_VEILED:
+                    stringComp.IntParameter = data => data.Veiled;
+                    stringComp.CompareInt = int.Parse(value);
+                    stringComp.StringParameter = data => data.Veiled.ToString();
+                    break;
+                case PARAMETER_FRACTUREDMODS:
+                    stringComp.IntParameter = data => data.Fractured;
+                    stringComp.CompareInt = int.Parse(value);
+                    stringComp.StringParameter = data => data.Fractured.ToString();
+                    break;
+                
 
                 default:
                     DebugWindow.LogMsg($"Filter parser: Parameter is not defined in code: {parameter}", 10);

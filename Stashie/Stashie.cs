@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using ExileCore;
 using ExileCore.PoEMemory.Components;
@@ -22,7 +23,7 @@ namespace Stashie
     public class StashieCore : BaseSettingsPlugin<StashieSettings>
     {
         private const string stashTabsNameChecker = "Stash Tabs Name Checker";
-        private const string FITERS_CONFIG_FILE = "FitersConfig.txt";
+        private const string FILTERS_CONFIG_FILE = "FiltersConfig.txt";
         private const int WHILE_DELAY = 5;
         private const int INPUT_DELAY = 15;
         private const string coroutineName = "Drop To Stash";
@@ -30,11 +31,11 @@ namespace Stashie
         private readonly Stopwatch StackItemTimer = new Stopwatch();
         private readonly WaitTime wait10ms = new WaitTime(10);
         private readonly WaitTime wait3ms = new WaitTime(3);
+        private readonly WaitTime wait1ms = new WaitTime(1);
         private Vector2 _clickWindowOffset;
         private List<CustomFilter> _customFilters;
         private List<RefillProcessor> _customRefills;
         private List<FilterResult> _dropItems;
-        private int[,] _ignoredCells;
         private List<ListIndexNode> _settingsListNodes;
         private uint coroutineIteration;
         private Coroutine CoroutineWorker;
@@ -43,6 +44,9 @@ namespace Stashie
         private Coroutine StashTabNamesCoroutine;
         private Action TestAction;
         private int visibleStashIndex = -1;
+        private bool playerHasDropdownMenu;
+        private const int MAXSHOWN_SIDEBARSTASHTABS = 32;
+        private int stashcount = 0;
 
         public StashieCore()
         {
@@ -71,14 +75,14 @@ namespace Stashie
             Input.RegisterKey(Keys.ShiftKey);
 
             Settings.DropHotkey.OnValueChanged += () => { Input.RegisterKey(Settings.DropHotkey); };
+            playerHasDropdownMenu = (int)GameController.Game.IngameState.IngameUi.StashElement.TotalStashes > 10;
+            stashcount = (int)GameController.Game.IngameState.IngameUi.StashElement.TotalStashes;
 
             return true;
         }
 
         public override void AreaChange(AreaInstance area)
         {
-            if (area.IsHideout) LoadIgnoredCells();
-
             //TODO Add lab name with stash
             if (area.IsHideout || area.DisplayName.Contains("Azurite Mine"))
                 StashTabNamesCoroutine?.Resume();
@@ -105,6 +109,7 @@ namespace Stashie
 
         private void SaveDefaultConfigsToDisk()
         {
+           // WriteInventoryNames();
             var path = $"{DirectoryFullName}\\GitUpdateConfig.txt";
             const string gitUpdateConfig = "Owner:nymann\r\n" + "Name:Stashie\r\n" + "Release\r\n";
             CreateFileAndAppendTextIfItDoesNotExitst(path, gitUpdateConfig);
@@ -116,26 +121,102 @@ namespace Stashie
                                           "//Chances:\t\t\tOrb of Chance,\t\t20,\t\t\t12,\t\t\t3";
 
             CreateFileAndAppendTextIfItDoesNotExitst(path, refillCurrency);
-            path = $"{DirectoryFullName}\\FitersConfig.txt";
+            path = $"{DirectoryFullName}\\FiltersConfig.txt";
 
             const string filtersConfig =
+            #region default config String
                 "//FilterName(menu name):\tfilters\t\t:ParentMenu(optionaly, will be created automatially for grouping)\r\n" +
-                "//Filter parts should divided by coma or | (for OR operation(any filter part can pass))\r\n" + "\r\n" +
-                "////////////\tAvailable properties:\t/////////////////////\r\n" + "/////////\tString (name) properties:\r\n" +
-                "//classname\r\n" + "//basename\r\n" + "//path\r\n" + "/////////\tNumerical properties:\r\n" +
-                "//itemquality\r\n//rarity\r\n//ilvl\r\n" + "/////////\tBoolean properties:\r\n" + "//identified\r\n" +
+                "//Filter parts should divided by coma or | (for OR operation(any filter part can pass))\r\n" + 
+                "\r\n" +
+                "////////////\tAvailable properties:\t/////////////////////\r\n" + 
+                "/////////\tString (name) properties:\r\n" +
+                "//classname\r\n" + 
+                "//basename\r\n" + 
+                "//path\r\n" + 
+                "/////////\tNumerical properties:\r\n" +
+                "//itemquality\r\n" +
+                "//rarity\r\n" +
+                "//ilvl\r\n" +
+                "//tier\r\n" +
+                "//numberofsockets\r\n" +
+                "//numberoflinks\r\n" +
+                "//veiled\r\n" +
+                "//fractured\r\n"+
+                "/////////\tBoolean properties:\r\n" + 
+                "//identified\r\n" +
+                "//fractured\r\n" +
+                "//corrupted\r\n" +
+                "//influenced\r\n" +
+                "//Elder\r\n" +
+                "//Shaper\r\n" +
+                "//Crusader\r\n" +
+                "//Hunter\r\n" +
+                "//Redeemer\r\n" +
+                "//Warlord\r\n" +
+                "//blightedMap\r\n" +
                 "/////////////////////////////////////////////////////////////\r\n" +
-                "////////////\tAvailable operations:\t/////////////////////\r\n" + "/////////\tString (name) operations:\r\n" +
-                "//!=\t(not equal)\r\n" + "//=\t\t(equal)\r\n" + "//^\t\t(contains)\r\n" + "//!^\t(not contains)\r\n" +
-                "/////////\tNumerical operations:\r\n" + "//!=\t(not equal)\r\n" + "//=\t\t(equal)\r\n" + "//>\t\t(bigger)\r\n" +
-                "//<\t\t(less)\r\n//<=\t(less or qual)\r\n//>=\t(bigger or qual)\r\n/////////\tBoolean operations:\r\n//!\t\t(not/invert)\r\n/////////////////////////////////////////////////////////////\r\n\r\n//Default Tabs\r\nDivination Cards:\tClassName=DivinationCard\t\t\t\t\t:Default Tabs\r\nGems:\t\t\t\tClassName^Skill Gem,ItemQuality=0\t\t\t:Default Tabs\r\nCurrency:\t\t\tClassName=StackableCurrency,path!^Essence\t:Default Tabs\r\nLeaguestones:\t\tClassName=Leaguestone\t\t\t\t\t\t:Default Tabs\r\nEssences:\t\t\tBaseName^Essence,ClassName=StackableCurrency:Default Tabs\r\nJewels:\t\t\t\tClassName=Jewel\t\t\t\t\t\t\t\t:Default Tabs\r\nFlasks:\t\t\t\tClassName^Flask,ItemQuality=0\t\t\t\t:Default Tabs\r\nTalisman:\t\t\tClassName=Amulet,BaseName^Talisman\t\t\t:Default Tabs\r\nJewelery:\t\t\tClassName=Amulet|ClassName=Ring\t\t\t\t:Default Tabs\r\n//White Items:\t\tRarity=Normal\t\t\t\t\t\t\t\t:Default Tabs\r\n\r\n//Chance Items\r\nSorcerer Boots:\tBaseName=Sorcerer Boots,Rarity=Normal\t:Chance Items\r\nLeather Belt:\tBaseName=Leather Belt,Rarity=Normal\t\t:Chance Items\r\n\r\n//Vendor Recipes\r\nChisel Recipe:\t\tBaseName=Stone Hammer|BaseName=Rock Breaker,ItemQuality=20\t:Vendor Recipes\r\nQuality Gems:\t\tClassName^Skill Gem,ItemQuality>0\t\t\t\t\t\t\t:Vendor Recipes\r\nQuality Flasks:\t\tClassName^Flask,ItemQuality>0\t\t\t\t\t\t\t\t:Vendor Recipes\r\n\r\n//Maps\r\nShore Shaped:\tClassName=Map,BaseName=Shaped Shore Map\t:Maps\r\nStrand Shaped:\tClassName=Map,BaseName=Shaped Strand Map:Maps\r\nShaped Maps:\tClassName=Map,BaseName^Shaped\t\t\t:Maps\r\nUniq Maps:\t\tClassName=Map,Rarity=Unique\t\t\t\t:Maps\r\nOther Maps:\t\tClassName=Map\t\t\t\t\t\t\t:Maps\r\n\r\n//Chaos Recipe LVL 2 (unindentified and ilvl 60 or above)\r\nWeapons:\t\t!identified,Rarity=Rare,ilvl>=60,ClassName^Two Hand|ClassName^One Hand|ClassName=Bow|ClassName=Staff|ClassName=Sceptre|ClassName=Wand|ClassName=Dagger|ClassName=Claw|ClassName=Shield :Chaos Recipe\r\nJewelry:\t\t!identified,Rarity=Rare,ilvl>=60,ClassName=Ring|ClassName=Amulet \t:Chaos Recipe\r\nBelts:\t\t\t!identified,Rarity=Rare,ilvl>=60,ClassName=Belt \t\t\t\t\t:Chaos Recipe\r\nHelms:\t\t\t!identified,Rarity=Rare,ilvl>=60,ClassName=Helmet \t\t\t\t\t:Chaos Recipe\r\nBody Armours:\t!identified,Rarity=Rare,ilvl>=60,ClassName=Body Armour \t\t\t\t:Chaos Recipe\r\nBoots:\t\t\t!identified,Rarity=Rare,ilvl>=60,ClassName=Boots \t\t\t\t\t:Chaos Recipe\r\n" +
+                "////////////\tAvailable operations:\t/////////////////////\r\n" + 
+                "/////////\tString (name) operations:\r\n" +
+                "//!=\t(not equal)\r\n" + 
+                "//=\t\t(equal)\r\n" + 
+                "//^\t\t(contains)\r\n" + 
+                "//!^\t(not contains)\r\n" +
+                "/////////\tNumerical operations:\r\n" + 
+                "//!=\t(not equal)\r\n" + 
+                "//=\t\t(equal)\r\n" + 
+                "//>\t\t(bigger)\r\n" +
+                "//<\t\t(less)\r\n" +
+                "//<=\t(less or qual)\r\n" +
+                "//>=\t(bigger or qual)\r\n" +
+                "/////////\tBoolean operations:\r\n" +
+                "//!\t\t(not/invert)\r\n" +
+                "/////////////////////////////////////////////////////////////\r\n" +
+                "\r\n" +
+                "//Default Tabs\r\n" +
+                "Currency:\t\t\tClassName=StackableCurrency,path!^Essence,BaseName!^Remnant,path!^CurrencyDelveCrafting,BaseName!^Splinter,Path!^CurrencyItemisedProphecy,Path!^CurrencyAfflictionOrb,Path!^Mushrune\t:Default Tabs\r\n" +
+                "Divination Cards:\t\t\tClassName=DivinationCard\t\t\t\t\t:Default Tabs\r\n" +
+                "Essences:\t\t\tBaseName^Essence|BaseName^Remnant,ClassName=StackableCurrency:Default Tabs\r\n" +
+                "Fragments:\t\t\tClassName=MapFragment|BaseName^Splinter,ClassName=StackableCurrency|ClassName=LabyrinthMapItem|BaseName^Scarab\t:Default Tabs\r\n" +
+                "Maps:\t\t\tClassName=Map,!blightedMap\t\t\t:Default Tabs\r\n" +
+                "Fossils/Resonators:\t\t\tpath^CurrencyDelveCrafting | path^DelveStackableSocketableCurrency\t:Default Tabs\r\n" +
+                "Gems:\t\t\t\tClassName^Skill Gem,ItemQuality=0\t\t\t:Default Tabs\r\n" +
+                "6-Socket:\t\t\tnumberofsockets=6,numberoflinks!=6\t\t\t:Default Tabs\r\n" +
+                "Prophecies:\t\t\tPath^CurrencyItemisedProphecy\t\t\t:Default Tabs\r\n" +
+                "Jewels:\t\t\t\tClassName=Jewel,Rarity != Unique\t\t\t\t\t\t\t\t:Default Tabs\r\n" +
+                "\r\n" +
+                "//Special Items\r\n"+
+                "Veiled:\t\t\tVeiled>0\t:Special items\r\n"+
+                "AnyInfluence:\t\t\tinfluenced\t:Special items\r\n"+
+                "\r\n" +
+                "//league Content\r\n"+
+                "Legion-Incubators:\t\t\tpath^CurrencyIncubation\t:League Items\r\n"+
+                "Delirium-Splinter:\t\t\tpath^CurrencyAfflictionShard\t:League Items\r\n" +
+                "Delirium-Simulacrum:\t\t\tpath^CurrencyAfflictionFragment\t:League Items\r\n" +
+                "Blight-AnnointOils:\t\t\tpath^Mushrune\t:League Items\r\n" +
+                "//Chance Items\r\n" +
+                "Sorcerer Boots:\tBaseName=Sorcerer Boots,Rarity=Normal\t:Chance Items\r\n" +
+                "Leather Belt:\tBaseName=Leather Belt,Rarity=Normal\t\t:Chance Items\r\n" +
+                "\r\n" +
+                "//Vendor Recipes\r\n" +
+                "Chisel Recipe:\t\tBaseName=Stone Hammer|BaseName=Rock Breaker,ItemQuality=20\t:Vendor Recipes\r\n" +
+                "Quality Gems:\t\tClassName^Skill Gem,ItemQuality>0\t\t\t\t\t\t\t:Vendor Recipes\r\n" +
+                "Quality Flasks:\t\tClassName^Flask,ItemQuality>0\t\t\t\t\t\t\t\t:Vendor Recipes\r\n" +
+                "\r\n" +
+                "//Chaos Recipe LVL 2 (unindentified and ilvl 60 or above)\r\n" +
+                "Weapons:\t\t!identified,Rarity=Rare,ilvl>=60,ClassName^Two Hand|ClassName^One Hand|ClassName=Bow|ClassName=Staff|ClassName=Sceptre|ClassName=Wand|ClassName=Dagger|ClassName=Claw|ClassName=Shield :Chaos Recipe\r\n" +
+                "Jewelry:\t\t!identified,Rarity=Rare,ilvl>=60,ClassName=Ring|ClassName=Amulet \t:Chaos Recipe\r\n" +
+                "Belts:\t\t\t!identified,Rarity=Rare,ilvl>=60,ClassName=Belt \t\t\t\t\t:Chaos Recipe\r\n" +
+                "Helms:\t\t\t!identified,Rarity=Rare,ilvl>=60,ClassName=Helmet \t\t\t\t\t:Chaos Recipe\r\n" +
+                "Body Armours:\t!identified,Rarity=Rare,ilvl>=60,ClassName=Body Armour \t\t\t\t:Chaos Recipe\r\n" +
+                "Boots:\t\t\t!identified,Rarity=Rare,ilvl>=60,ClassName=Boots \t\t\t\t\t:Chaos Recipe\r\n" +
                 "Gloves:\t\t\t!identified,Rarity=Rare,ilvl>=60,ClassName=Gloves \t\t\t\t\t:Chaos Recipe";
-
+            #endregion
             CreateFileAndAppendTextIfItDoesNotExitst(path, filtersConfig);
         }
 
         public override void DrawSettings()
         {
+            DrawIgnoredCellsSettings();
             base.DrawSettings();
 
             foreach (var settingsCustomRefillOption in Settings.CustomRefillOptions)
@@ -192,7 +273,7 @@ namespace Stashie
 
         private void LoadCustomFilters()
         {
-            var filterPath = Path.Combine(DirectoryFullName, FITERS_CONFIG_FILE);
+            var filterPath = Path.Combine(DirectoryFullName, FILTERS_CONFIG_FILE);
             var filtersLines = File.ReadAllLines(filterPath);
             var unused = new FilterParser();
             _customFilters = FilterParser.Parse(filtersLines);
@@ -209,6 +290,81 @@ namespace Stashie
                 _settingsListNodes.Add(indexNodeS);
             }
         }
+
+        public void SaveIgnoredSLotsFromInventoryTemplate()
+        {
+            Settings.IgnoredCells = new[,]
+            {
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+            };
+            try
+            {
+                var inventory = GameController.Game.IngameState.IngameUi.InventoryPanel[InventoryIndex.PlayerInventory];
+                    foreach (var item in inventory.VisibleInventoryItems)
+                    {
+                        var baseC = item.Item.GetComponent<Base>();
+                        var itemSizeX = baseC.ItemCellsSizeX;
+                        var itemSizeY = baseC.ItemCellsSizeY;
+                        var inventPosX = item.InventPosX;
+                        var inventPosY = item.InventPosY;
+                        for (var y = 0; y < itemSizeY; y++)
+                        {
+                            for (var x = 0; x < itemSizeX; x++)
+                                Settings.IgnoredCells[y + inventPosY, x + inventPosX] = 1;
+                        }
+                    }
+            }
+            catch (Exception e)
+            {
+                LogError($"{e}", 5);
+            }
+        }
+
+        private void DrawIgnoredCellsSettings()
+        {
+            try
+            {
+                if (ImGui.Button("Copy Inventory"))
+                {
+                    SaveIgnoredSLotsFromInventoryTemplate();
+                }
+                ImGui.SameLine();
+                ImGui.TextDisabled("(?)");
+                if (ImGui.IsItemHovered())
+                {
+                    ImGui.SetTooltip($"Checked = Item will be ignored{Environment.NewLine}UnChecked = Item will be processed");
+                }
+            }
+            catch (Exception e)
+            {
+                LogError(e.ToString(), 10);
+            }
+
+            var _numb = 1;
+            for (var i = 0; i < 5; i++)
+            {
+                for (var j = 0; j < 12; j++) 
+                {
+                    var toggled = Convert.ToBoolean(Settings.IgnoredCells[i, j]);
+                    if (ImGui.Checkbox($"##{_numb}IgnoredCells", ref toggled))
+                    {
+                        Settings.IgnoredCells[i, j] ^= 1;
+                    }
+
+                    if ((_numb - 1) % 12 < 11)
+                    {
+                        ImGui.SameLine();
+                    }
+
+                    _numb += 1;
+                }
+            }
+        }
+
 
         private void GenerateMenu()
         {
@@ -324,9 +480,9 @@ namespace Stashie
 
                 try
                 {
-                    _ignoredCells = JsonConvert.DeserializeObject<int[,]>(json);
-                    var ignoredHeight = _ignoredCells.GetLength(0);
-                    var ignoredWidth = _ignoredCells.GetLength(1);
+                    Settings.IgnoredCells = JsonConvert.DeserializeObject<int[,]>(json);
+                    var ignoredHeight = Settings.IgnoredCells.GetLength(0);
+                    var ignoredWidth = Settings.IgnoredCells.GetLength(1);
 
                     if (ignoredHeight != 5 || ignoredWidth != 12)
                         LogError("Stashie: Wrong IgnoredCells size! Should be 12x5. Reseting to default..", 5);
@@ -340,13 +496,7 @@ namespace Stashie
                 }
             }
 
-            _ignoredCells = new[,]
-            {
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}
-            };
-
-            var defaultSettings = JsonConvert.SerializeObject(_ignoredCells);
+            var defaultSettings = JsonConvert.SerializeObject(Settings.IgnoredCells);
             defaultSettings = defaultSettings.Replace("[[", "[\n[");
             defaultSettings = defaultSettings.Replace("],[", "],\n[");
             defaultSettings = defaultSettings.Replace("]]", "]\n]");
@@ -436,16 +586,35 @@ namespace Stashie
                 {
                     if (invItem.Item == null || invItem.Address == 0) continue;
 
-                    if (CheckIgnoreCells(invItem)) continue;
+                    if (CheckIgnoreCells(invItem)) continue; 
+                     
 
                     var baseItemType = GameController.Files.BaseItemTypes.Translate(invItem.Item.Path);
-
                     var testItem = new ItemData(invItem, baseItemType);
                     var result = CheckFilters(testItem);
-
-                    if (result != null) _dropItems.Add(result);
+                    if (result != null)
+                    {
+                        _dropItems.Add(result);
+                        //WriteInventoryNames();
+                    }
+                    
                 }
             }
+        }
+
+        private void WriteInventoryNames()
+        {
+            var path = $"{DirectoryFullName}\\InventoryDebugList.txt";
+            StringBuilder sb = new StringBuilder();
+            foreach (var inventoryitem in _dropItems)
+            {
+                sb.AppendLine(inventoryitem.ItemData.BaseName);
+                sb.AppendLine(inventoryitem.ItemData.ClassName);
+                sb.AppendLine(inventoryitem.ItemData.Path.ToString());
+            }
+
+            File.WriteAllText(path, sb.ToString());
+
         }
 
         private bool CheckIgnoreCells(NormalInventoryItem inventItem)
@@ -460,7 +629,7 @@ namespace Stashie
 
             if (inventPosY < 0 || inventPosY >= 5) return true;
 
-            return _ignoredCells[inventPosY, inventPosX] != 0; //No need to check all item size
+            return Settings.IgnoredCells[inventPosY, inventPosX] != 0; //No need to check all item size
         }
 
         private FilterResult CheckFilters(ItemData itemData)
@@ -918,17 +1087,26 @@ namespace Stashie
 
         public IEnumerator SwitchToTab(int tabIndex)
         {
+            
             var latency = (int) GameController.Game.IngameState.CurLatency;
 
             // We don't want to Switch to a tab that we are already on
-            var stashPanel = GameController.Game.IngameState.IngameUi.StashElement;
+            //var stashPanel = GameController.Game.IngameState.IngameUi.StashElement;
 
             visibleStashIndex = GetIndexOfCurrentVisibleTab();
-
+            var travelDistance = Math.Abs(tabIndex - visibleStashIndex);
+            if(travelDistance == 0)
+            {
+                yield break;
+            }
             // We want to maximum wait 20 times the Current Latency before giving up in our while loops.
-            var maxNumberOfTries = latency * 20 > 2000 ? latency * 20 / WHILE_DELAY : 2000 / WHILE_DELAY;
-
-            if (tabIndex > 30 || Settings.UseArrow)
+            //var maxNumberOfTries = latency * 20 > 2000 ? latency * 20 / WHILE_DELAY : 2000 / WHILE_DELAY;
+            if(travelDistance > 3 && !Settings.UseArrow)
+            {
+                yield return SwitchToTabViaDropdownMenu(tabIndex);
+                yield return new WaitTime(latency + Settings.ExtraDelay);
+            }
+            else
             {
                 yield return SwitchToTabViaArrowKeys(tabIndex);
                 yield return new WaitTime(latency + Settings.ExtraDelay);
@@ -936,7 +1114,6 @@ namespace Stashie
 
             visibleStashIndex = GetIndexOfCurrentVisibleTab();
         }
-
         private IEnumerator SwitchToTabViaArrowKeys(int tabIndex)
         {
             var indexOfCurrentVisibleTab = GetIndexOfCurrentVisibleTab();
@@ -958,6 +1135,108 @@ namespace Stashie
 
                 yield return new WaitTime(20);
                 retry++;
+            }
+        }
+        private IEnumerator SwitchToTabViaDropdownMenu(int tabIndex)
+        {
+            var latency = (int)GameController.Game.IngameState.CurLatency;
+            var viewAllTabsButton = GameController.Game.IngameState.IngameUi.StashElement.ViewAllStashButton;
+            var waitTime = new WaitTime(Settings.ExtraDelay);
+
+            var dropdownMenu = GameController.Game.IngameState.IngameUi.StashElement.ViewAllStashPanel;
+            var allTabsButton = viewAllTabsButton.GetClientRect();
+            var slider = stashcount > MAXSHOWN_SIDEBARSTASHTABS;
+            if (!dropdownMenu.IsVisible)
+            {
+                Input.SetCursorPos(allTabsButton.Center);
+                yield return wait3ms;
+                Input.MouseMove();
+                Input.LeftDown();
+                yield return wait1ms;
+                Input.LeftUp();
+                yield return wait10ms;
+                //wait for the dropdown menu to become visible
+                /*
+                for (var tries = 0; !dropdownMenu.IsVisible && tries < 20 ; ++tries)
+                {
+                    yield return new WaitTime(latency);
+                }
+                */
+                if (!dropdownMenu.IsVisible)
+                {
+                    LogError($"Error in opening DropdownMenu.", 5);
+                    yield break;
+                }
+            }
+            
+            RectangleF tabPos;
+            // Make sure that we are scrolled to the top in the menu.
+            if (slider)
+            {
+                for (int i = 0; i < stashcount - MAXSHOWN_SIDEBARSTASHTABS + 1; ++i)
+                {
+                    Input.KeyDown(Keys.Up);
+                    yield return wait1ms;
+                    Input.KeyUp(Keys.Up);
+                    yield return wait1ms;
+                }
+            }
+            //get clickposition of tab label
+            for (int i = 0; i < tabIndex; ++i)
+            {
+                Input.KeyDown(Keys.Down);
+                yield return wait1ms;
+                Input.KeyUp(Keys.Down);
+                yield return wait1ms;
+            }
+            //tabPos = dropdownMenu.GetChildAtIndex(1).GetChildAtIndex(MAXSHOWN_SIDEBARSTASHTABS - 1).GetClientRect();
+
+            //enter-key Method
+            Input.KeyDown(Keys.Enter);
+            yield return wait1ms;
+            Input.KeyUp(Keys.Enter);
+            yield return wait1ms;
+            /*
+            Input.SetCursorPos(tabPos.Center);
+            yield return wait10ms;
+            Input.MouseMove();
+            Input.LeftDown();
+            yield return new WaitTime(1);
+            Input.LeftUp();
+            yield return new WaitTime(1);
+            */
+            //reset Sliderposition
+            if (slider)
+            {
+                if (!dropdownMenu.IsVisible)
+                {
+                    //opening DropdownMenu
+                    Input.SetCursorPos(allTabsButton.Center);
+                    yield return wait10ms;
+                    Input.MouseMove();
+                    Input.LeftDown();
+                    yield return wait1ms;
+                    Input.LeftUp();
+                    yield return wait10ms;
+                    // wait for the dropdown menu to become visible.
+                    for (int count = 0; !dropdownMenu.IsVisible && count <= 20; ++count)
+                    {
+                        yield return new WaitTime(latency);
+                    }
+                    if (!dropdownMenu.IsVisible)
+                    {
+                        LogError($"Error in Scrolling back to the top.", 5);
+                        yield break;
+                    }
+                }
+                //"scrolling" back up
+                for(int i = 0; i < stashcount - MAXSHOWN_SIDEBARSTASHTABS + 1; ++i)
+                {
+                    Input.KeyDown(Keys.Up);
+                    yield return new WaitTime(1);
+                    Input.KeyUp(Keys.Up);
+                    yield return new WaitTime(1);
+                }
             }
         }
 
@@ -993,7 +1272,7 @@ namespace Stashie
             _settingsListNodes = new List<ListIndexNode>(100);
             LoadCustomRefills();
             LoadCustomFilters();
-            LoadIgnoredCells();
+           // LoadIgnoredCells();
 
             try
             {

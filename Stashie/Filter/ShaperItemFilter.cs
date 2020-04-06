@@ -1,6 +1,6 @@
 ﻿namespace Stashie
 {
-    public class ShaperItemFiler : IIFilter
+    public class ShaperItemFilter : IIFilter
     {
         public bool isShaper;
 

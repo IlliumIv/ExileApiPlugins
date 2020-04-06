@@ -22,6 +22,7 @@ namespace HealthBars
             DebuffPanelIconSize = new RangeNode<int>(20, 15, 40);
             GlobalZ = new RangeNode<int>(-100, -300, 300);
             PlayerZ = new RangeNode<int>(-100, -300, 300);
+            OffsetBars = new RangeNode<int>(0, -300, 300);
         }
 
         [Menu("Show In Town")]
@@ -50,18 +51,22 @@ namespace HealthBars
         public RangeNode<int> GlobalZ { get; set; }
         [Menu("Player Z")]
         public RangeNode<int> PlayerZ { get; set; }
+        [Menu("PlayerBar Y Offset")]
+        public RangeNode<int> OffsetBars { get; set; }
         [Menu("Hide Over UI")]
         public ToggleNode HideOverUi { get; set; } = new ToggleNode(true);
         [Menu("Using ImGui for render")]
         public ToggleNode ImGuiRender { get; set; } = new ToggleNode(false);
         public RangeNode<int> LimitDrawDistance { get; set; } = new RangeNode<int>(133, 0, 1000);
         [Menu("Rounding")]
+        
         public RangeNode<float> Rounding { get; set; } = new RangeNode<float>(0, 0, 64);
         public ToggleNode MultiThreading { get; set; } = new ToggleNode(false);
         public RangeNode<int> MultiThreadingCountEntities { get; set; } = new RangeNode<int>(10, 1, 200);
         public RangeNode<int> ShowMinionOnlyBelowHp { get; set; } = new RangeNode<int>(50, 1, 100);
         public ToggleNode SelfHealthBarShow { get; set; } = new ToggleNode(true);
         public ToggleNode Enable { get; set; }
+        
     }
 
     public class UnitSettings : ISettings

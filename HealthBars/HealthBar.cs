@@ -169,9 +169,9 @@ namespace HealthBars
 
         public void DpsRefresh()
         {
-            var chechTime = DpsQueue.Count > 0 ? DPS_CHECK_TIME : DPS_FAST_CHECK_TIME;
+            var checkTime = DpsQueue.Count > 0 ? DPS_CHECK_TIME : DPS_FAST_CHECK_TIME;
 
-            if (dpsStopwatch.ElapsedMilliseconds >= chechTime)
+            if (dpsStopwatch.ElapsedMilliseconds >= checkTime)
             {
                 var hp = GetFullHp();
 

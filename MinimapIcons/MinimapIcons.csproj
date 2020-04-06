@@ -50,6 +50,10 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ExileCore">
+      <HintPath>..\..\TehCheat\PoEHelper\ExileCore.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="JM.LinqFaster, Version=0.1.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\PoeHelper\JM.LinqFaster.dll</HintPath>
       <Private>False</Private>
@@ -77,13 +81,6 @@
     <Compile Include="MinimapIcons.cs" />
     <Compile Include="MapIconsSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\ExileApi\Core\Core.csproj">
-      <Project>{5539D732-34A7-44AB-9E28-116C3429B12A}</Project>
-      <Name>Core</Name>
-      <Private>False</Private>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

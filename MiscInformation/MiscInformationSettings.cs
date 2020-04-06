@@ -16,6 +16,7 @@ namespace MiscInformation
             FpsTextColor = new ColorBGRA(220, 190, 130, 255);
             TimerTextColor = new ColorBGRA(220, 190, 130, 255);
             LatencyTextColor = new ColorBGRA(220, 190, 130, 255);
+            ExtraSpace = new RangeNode<int>(0, 0, 200);
         }
 
         public ToggleNode Enable { get; set; } = new ToggleNode(true);
@@ -27,5 +28,6 @@ namespace MiscInformation
         public ColorNode FpsTextColor { get; set; }
         public ColorNode TimerTextColor { get; set; }
         public ColorNode LatencyTextColor { get; set; }
+        public RangeNode<int> ExtraSpace { get; set; }
     }
 }

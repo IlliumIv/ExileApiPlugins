@@ -20,6 +20,7 @@ namespace PickIt
             RGB = new ToggleNode(true);
             AllDivs = new ToggleNode(true);
             AllCurrency = new ToggleNode(true);
+            IgnoreScrollOfWisdom = new ToggleNode(true);
             AllUniques = new ToggleNode(true);
             Maps = new ToggleNode(true);
             UniqueMap = new ToggleNode(true);
@@ -30,7 +31,6 @@ namespace PickIt
             GemQuality = new RangeNode<int>(1, 0, 20);
             GroundChests = new ToggleNode(false);
             ShaperItems = new ToggleNode(true);
-            MetamorphBodyParts = new ToggleNode(true);
             ElderItems = new ToggleNode(true);
             FracturedItems = new ToggleNode(true);
             Rares = new ToggleNode(true);
@@ -72,7 +72,6 @@ namespace PickIt
         public RangeNode<int> ChestRange { get; set; }
         public RangeNode<int> ExtraDelay { get; set; }
         public ToggleNode ShaperItems { get; set; }
-        public ToggleNode MetamorphBodyParts { get; set; }
         public ToggleNode ElderItems { get; set; }
         public ToggleNode FracturedItems { get; set; }
         public ToggleNode Rares { get; set; }
@@ -108,6 +107,7 @@ namespace PickIt
         public ToggleNode PickUpEverything { get; set; }
         public ToggleNode AllDivs { get; set; }
         public ToggleNode AllCurrency { get; set; }
+        public ToggleNode IgnoreScrollOfWisdom { get; set; }
         public ToggleNode AllUniques { get; set; }
         public ToggleNode Maps { get; set; }
         public RangeNode<int> MapTier { get; set; }

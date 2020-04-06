@@ -32,7 +32,7 @@ namespace Stashie
 
         [Menu("Settings", 500)]
         public EmptyNode Settings { get; set; }
-        [Menu("Require Hotkey", "If you just want Stashie to drop items to stash, as soon as you open it.", 1000, 500)]
+        [Menu("Require Hotkey", "If you don't want Stashie to drop items to stash, as soon as you open it.", 1000, 500)]
         public ToggleNode RequireHotkey { get; set; }
         [Menu("Hotkey", 1001, 1000)]
         public HotkeyNode DropHotkey { get; set; }
@@ -53,5 +53,13 @@ namespace Stashie
         [Menu("Mouse Steps", "", 5001, 500)]
         public RangeNode<int> MouseSpeed { get; set; }
         public ToggleNode Enable { get; set; }
+        public int[,] IgnoredCells { get; set; } =
+        {
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}
+        };
     }
 }

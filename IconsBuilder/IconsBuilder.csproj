@@ -23,10 +23,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\..\PoeHelper\Plugins\Compiled\IconsBuilder\</OutputPath>
+    <OutputPath>..\0Compiles\IconsBuilder\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -50,26 +50,30 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ExileCore">
+      <HintPath>..\..\PoEHelper\ExileCore.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="JM.LinqFaster, Version=0.1.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\PoeHelper\JM.LinqFaster.dll</HintPath>
+      <HintPath>..\..\ExileApi\packages\LinqFaster.1.0.0\lib\net461\JM.LinqFaster.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="MoreLinq">
-      <HintPath>..\..\PoeHelper\MoreLinq.dll</HintPath>
+      <HintPath>..\..\ExileApi\packages\morelinq.3.2.0\lib\net451\MoreLinq.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10">
-      <HintPath>..\..\PoeHelper\Serilog.dll</HintPath>
+      <HintPath>..\..\ExileApi\packages\Serilog.2.8.0\lib\net46\Serilog.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1">
-      <HintPath>..\..\PoeHelper\SharpDX.dll</HintPath>
+      <HintPath>..\..\ExileApi\packages\SharpDX.4.2.0\lib\net45\SharpDX.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="SharpDX.Mathematics, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1">
-      <HintPath>..\..\PoeHelper\SharpDX.Mathematics.dll</HintPath>
+      <HintPath>..\..\ExileApi\packages\SharpDX.Mathematics.4.2.0\lib\net45\SharpDX.Mathematics.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -84,6 +88,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChestIcon.cs" />
+    <Compile Include="DeliriumIcon.cs" />
     <Compile Include="IconsBuilder.cs" />
     <Compile Include="IconsBuilderSettings.cs" />
     <Compile Include="LegionIcon.cs" />
@@ -95,13 +100,6 @@
     <Compile Include="PortalIcon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShrineIcon.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\ExileApi\Core\Core.csproj">
-      <Project>{5539d732-34a7-44ab-9e28-116c3429b12a}</Project>
-      <Name>Core</Name>
-      <Private>False</Private>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
