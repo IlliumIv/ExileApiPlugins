@@ -25,3 +25,30 @@
 [submodule "BladeFlurryCharges"]
 	path = BladeFlurryCharges
 	url = https://github.com/IlliumIv/BladeFlurryCharges.git
+[submodule "IconsBuilder"]
+	path = IconsBuilder
+	url = https://github.com/IlliumIv/IconsBuilder.git
+[submodule "AutoOpen"]
+	path = AutoOpen
+	url = https://github.com/IlliumIv/AutoOpen.git
+[submodule "BuffUtil"]
+	path = BuffUtil
+	url = https://github.com/IlliumIv/BuffUtil.git
+[submodule "PassiveSkillTreePlanter"]
+	path = PassiveSkillTreePlanter
+	url = https://github.com/IlliumIv/PassiveSkillTreePlanter.git
+[submodule "Pickit"]
+	path = Pickit
+	url = https://github.com/IlliumIv/Pickit.git
+[submodule "Stashie"]
+	path = Stashie
+	url = https://github.com/IlliumIv/Stashie.git
+[submodule "AutoQuit"]
+	path = AutoQuit
+	url = https://github.com/IlliumIv/AutoQuit.git
+[submodule "MineDetonator"]
+	path = MineDetonator
+	url = https://github.com/IlliumIv/MineDetonator.git
+[submodule "HealthBars"]
+	path = HealthBars
+	url = https://github.com/IlliumIv/HealthBars.git
