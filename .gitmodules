@@ -28,3 +28,6 @@
 [submodule "DeliriumSpawnerHighlight"]
 	path = DeliriumSpawnerHighlight
 	url = https://github.com/IlliumIv/DeliriumSpawnerHighlight.git
+[submodule "AdvancedUberLabLayout"]
+	path = AdvancedUberLabLayout
+	url = https://github.com/IlliumIv/AdvancedUberLabLayout.git
