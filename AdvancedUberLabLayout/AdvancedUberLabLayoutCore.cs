@@ -160,7 +160,6 @@ namespace AdvancedUberLabLayout
                 if (match.Success)
                 {
                     tempFileName = file;
-                    LogMessage($"{Name}: Catch! Try to load image: {file}", 5);
                     break;
                 }
             }
@@ -190,25 +189,47 @@ namespace AdvancedUberLabLayout
 
             using (WebClient webClient = new WebClient())
             {
-                var stream = webClient.OpenRead(poeLabLink);
+                var mainPageStream = webClient.OpenRead(poeLabLink);
 
-                using (StreamReader streamReader = new StreamReader(stream))
+                using (StreamReader mainPageReader = new StreamReader(mainPageStream))
                 {
-                    MatchCollection matches = labPageLinkCatch.Matches(streamReader.ReadToEnd());
+                    MatchCollection labPagesLinks = labPageLinkCatch.Matches(mainPageReader.ReadToEnd());
 
-                    foreach (Match match in matches)
-                        if (match.Value.ToLower().Contains(Settings.LabType.Value) || match.Value.ToLower().Contains("merc"))
+                    string labName = "uber";
+
+                    switch (Settings.LabType.Value)
+                    {
+                        case "normal":
+                            labName = "normal";
+                            break;
+                        case "cruel":
+                            labName = "cruel";
+                            break;
+                        case "merciless":
+                            labName = "merc";
+                            break;
+                        case "uber":
+                            labName = "uber";
+                            break;
+                    };
+
+                    foreach (Match labPageLink in labPagesLinks)
+                    {
+                        if (labPageLink.Value.ToLower().Contains(labName))
                         {
-                            stream = webClient.OpenRead(match.Groups[1].Value);
+                            var labPageStream = webClient.OpenRead(labPageLink.Groups[1].Value);
 
-                            using (StreamReader streamReader1 = new StreamReader(stream))
+                            using (StreamReader labPageReader = new StreamReader(labPageStream))
                             {
                                 Regex imageLinkCatch = new Regex($@"labfiles\/(.*{Settings.LabType.Value}\.jpg)"" data");
-                                MatchCollection matches1 = imageLinkCatch.Matches(streamReader1.ReadToEnd());
+                                MatchCollection matches1 = imageLinkCatch.Matches(labPageReader.ReadToEnd());
                                 ImageUrl = poeLabImagePrefix + matches1[0].Groups[1].Value;
                                 FilePath = Path.Combine(ImagesDirectory, matches1[0].Groups[1].Value);
                             }
+
+                            break;
                         }
+                    }
                 }
 
                 try
