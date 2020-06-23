@@ -31,3 +31,6 @@
 [submodule "AdvancedUberLabLayout"]
 	path = AdvancedUberLabLayout
 	url = https://github.com/IlliumIv/AdvancedUberLabLayout.git
+[submodule "PreloadAlert"]
+	path = PreloadAlert
+	url = https://github.com/IlliumIv/PreloadAlert.git
