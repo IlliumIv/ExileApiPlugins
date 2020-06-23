@@ -25,3 +25,6 @@
 [submodule "BladeFlurryCharges"]
 	path = BladeFlurryCharges
 	url = https://github.com/IlliumIv/BladeFlurryCharges.git
+[submodule "DeliriumSpawnerHighlight"]
+	path = DeliriumSpawnerHighlight
+	url = https://github.com/IlliumIv/DeliriumSpawnerHighlight.git
