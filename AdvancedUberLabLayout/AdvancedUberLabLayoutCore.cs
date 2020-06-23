@@ -4,6 +4,9 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Net;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ExileCore;
 using ExileCore.Shared.Enums;
@@ -14,9 +17,14 @@ using RectangleF = SharpDX.RectangleF;
 
 namespace AdvancedUberLabLayout
 {
-    //http://www.poelab.com/wp-content/uploads/2017/09/2017-09-25_normal.jpg
+    //https://www.poelab.com/wp-content/labfiles/2020-06-23_000046187_uber.jpg
+
     public class AdvancedUberLabLayoutCore : BaseSettingsPlugin<Settings>
     {
+        private static readonly Regex labPageLinkCatch = new Regex(@"href=""(.*)"">.* LAB");
+        private static readonly string poeLabLink = @"https://www.poelab.com/";
+        private static readonly string poeLabImagePrefix = @"https://www.poelab.com/wp-content/labfiles/";
+
         public override void AreaChange(AreaInstance area)
         {
             if (Settings.AutoLabDetection.Value)
@@ -77,9 +85,12 @@ namespace AdvancedUberLabLayout
 
             UpdateTime();
 
+            /*
             if (ImageState == ImageCheckState.ReadyToDraw &&
                 (GameController.Game.IngameState.IngameUi.OpenRightPanel is null) &&
                 (GameController.Game.IngameState.IngameUi.OpenRightPanel is null))
+                */
+            if (ImageState == ImageCheckState.ReadyToDraw)
             {
                 var color = Color.White;
                 color.A = (byte) Settings.Transparency;
@@ -135,9 +146,24 @@ namespace AdvancedUberLabLayout
             var month = time.Month.ToString("00");
             var day = time.Day.ToString("00");
 
-            var tempFileName = $"{time.Year}-{month}-{day}_{Settings.LabType.Value}.jpg";
+            var tempFileName = "";
+            var ImageUrl = "";
 
             Directory.CreateDirectory(ImagesDirectory);
+
+            var files = Directory.GetFiles(ImagesDirectory);
+
+            Regex findImage = new Regex($@"{time.Year}-{month}-{day}.*{Settings.LabType.Value}.jpg");
+            foreach (string file in files)
+            {
+                Match match = findImage.Match(file);
+                if (match.Success)
+                {
+                    tempFileName = file;
+                    LogMessage($"{Name}: Catch! Try to load image: {file}", 5);
+                    break;
+                }
+            }
 
             var FilePath = Path.Combine(ImagesDirectory, tempFileName);
 
@@ -152,24 +178,50 @@ namespace AdvancedUberLabLayout
 
             LogMessage("Loading new lab layout image from site", 3);
 
-            var ImageUrl = $"https://www.poelab.com/wp-content/labfiles/" + tempFileName;
+            ServicePointManager.ServerCertificateValidationCallback +=
+                delegate (object sender, X509Certificate certificate, X509Chain chain,
+                   SslPolicyErrors sslPolicyErrors)
+                {
+                    return true;
+                };
 
             ImageState = ImageCheckState.Downloading;
-
-            var webClient = new WebClient();
-
             var imageBytes = new byte[0];
 
-            try
+            using (WebClient webClient = new WebClient())
             {
-                imageBytes = await webClient.DownloadDataTaskAsync(ImageUrl);
-            }
-            catch // (Exception ex)
-            {
-                ImageState = ImageCheckState.NotFound404;
+                var stream = webClient.OpenRead(poeLabLink);
 
-                //Not found
-                return;
+                using (StreamReader streamReader = new StreamReader(stream))
+                {
+                    MatchCollection matches = labPageLinkCatch.Matches(streamReader.ReadToEnd());
+
+                    foreach (Match match in matches)
+                        if (match.Value.ToLower().Contains(Settings.LabType.Value) || match.Value.ToLower().Contains("merc"))
+                        {
+                            stream = webClient.OpenRead(match.Groups[1].Value);
+
+                            using (StreamReader streamReader1 = new StreamReader(stream))
+                            {
+                                Regex imageLinkCatch = new Regex($@"labfiles\/(.*{Settings.LabType.Value}\.jpg)"" data");
+                                MatchCollection matches1 = imageLinkCatch.Matches(streamReader1.ReadToEnd());
+                                ImageUrl = poeLabImagePrefix + matches1[0].Groups[1].Value;
+                                FilePath = Path.Combine(ImagesDirectory, matches1[0].Groups[1].Value);
+                            }
+                        }
+                }
+
+                try
+                {
+                    imageBytes = await webClient.DownloadDataTaskAsync(ImageUrl);
+                }
+                catch // (Exception ex)
+                {
+                    ImageState = ImageCheckState.NotFound404;
+
+                    //Not found
+                    return;
+                }
             }
 
             Bitmap downloadedImage;
@@ -198,7 +250,7 @@ namespace AdvancedUberLabLayout
             }
             catch (Exception ex)
             {
-                LogError("AdvancedUberLabLayout Plugin: Error while cropping or saving image: " + ex.Message, 10);
+                LogError($"{Name}: Error while cropping or saving image: {ex.Message}", 10);
                 ImageState = ImageCheckState.FailedToLoad;
             }
         }
