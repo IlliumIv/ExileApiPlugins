@@ -1,13 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using ExileCore;
 using ExileCore.Shared.Enums;
-using ExileCore.Shared.Input;
 using SharpDX;
 using Color = SharpDX.Color;
 using Rectangle = System.Drawing.Rectangle;
@@ -54,8 +53,8 @@ namespace AdvancedUberLabLayout
             Settings.LabType.OnValueSelected += delegate { LoadImage(); };
 #pragma warning restore 4014
 
-            Input.Instance.RegisterKey(Settings.Reload);
-            Input.Instance.RegisterKey(Settings.ToggleDraw);
+            Input.RegisterKey(Settings.Reload);
+            Input.RegisterKey(Settings.ToggleDraw);
 
             return true;
         }
@@ -239,7 +238,7 @@ namespace AdvancedUberLabLayout
         private string ImagePathToDraw;
         private ImageCheckState ImageState = ImageCheckState.Undefined;
 
-        private readonly string[] LabTypes =
+        private readonly List<string> LabTypes = new List<string>()
         {
             "normal",
             "cruel",

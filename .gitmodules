@@ -1,6 +1,3 @@
-[submodule "Cheat Sheets"]
-	path = Cheat Sheets
-	url = https://github.com/IlliumIv/Cheat-Sheets.git
 [submodule "AutoSkill"]
 	path = AutoSkill
 	url = https://github.com/IlliumIv/AutoSkill.git
@@ -28,6 +25,3 @@
 [submodule "BladeFlurryCharges"]
 	path = BladeFlurryCharges
 	url = https://github.com/IlliumIv/BladeFlurryCharges.git
-[submodule "FollowMe"]
-	path = FollowMe
-	url = https://github.com/IlliumIv/FollowMe.git
