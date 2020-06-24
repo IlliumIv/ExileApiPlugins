@@ -34,3 +34,6 @@
 [submodule "PreloadAlert"]
 	path = PreloadAlert
 	url = https://github.com/IlliumIv/PreloadAlert.git
+[submodule "Stashie"]
+	path = Stashie
+	url = https://github.com/IlliumIv/Stashie.git
