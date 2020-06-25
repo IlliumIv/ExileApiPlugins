@@ -37,3 +37,9 @@
 [submodule "Stashie"]
 	path = Stashie
 	url = https://github.com/IlliumIv/Stashie.git
+[submodule "HealthBars"]
+	path = HealthBars
+	url = https://github.com/IlliumIv/HealthBars.git
+[submodule "AdvancedTooltip"]
+	path = AdvancedTooltip
+	url = https://github.com/IlliumIv/AdvancedTooltip.git
