@@ -43,3 +43,6 @@
 [submodule "AdvancedTooltip"]
 	path = AdvancedTooltip
 	url = https://github.com/IlliumIv/AdvancedTooltip.git
+[submodule "HighlightedItems"]
+	path = HighlightedItems
+	url = https://github.com/IlliumIv/HighlightedItems.git

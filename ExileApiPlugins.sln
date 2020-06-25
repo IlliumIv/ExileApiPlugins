@@ -59,6 +59,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BladeFlurryCharges", "Blade
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeliriumSpawnerHighlight", "DeliriumSpawnerHighlight\DeliriumSpawnerHighlight.csproj", "{86357A77-6EF8-4ED5-91FB-EDBA230B6291}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HighlightedItems", "HighlightedItems\HighlightedItems.csproj", "{6D997C8E-5C70-4068-844B-E8BD951C9F42}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -291,6 +293,14 @@ Global
 		{86357A77-6EF8-4ED5-91FB-EDBA230B6291}.Release|Any CPU.Build.0 = Release|Any CPU
 		{86357A77-6EF8-4ED5-91FB-EDBA230B6291}.Release|x64.ActiveCfg = Release|Any CPU
 		{86357A77-6EF8-4ED5-91FB-EDBA230B6291}.Release|x64.Build.0 = Release|Any CPU
+		{6D997C8E-5C70-4068-844B-E8BD951C9F42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D997C8E-5C70-4068-844B-E8BD951C9F42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D997C8E-5C70-4068-844B-E8BD951C9F42}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6D997C8E-5C70-4068-844B-E8BD951C9F42}.Debug|x64.Build.0 = Debug|Any CPU
+		{6D997C8E-5C70-4068-844B-E8BD951C9F42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D997C8E-5C70-4068-844B-E8BD951C9F42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D997C8E-5C70-4068-844B-E8BD951C9F42}.Release|x64.ActiveCfg = Release|Any CPU
+		{6D997C8E-5C70-4068-844B-E8BD951C9F42}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
